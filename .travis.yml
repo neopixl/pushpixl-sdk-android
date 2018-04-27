@@ -1,0 +1,38 @@
+# =============== Project Configuration ===============
+language: android
+android:
+  components:
+    - tools # to get the new `repository-11.xml`
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
+    - platform-tools
+    - build-tools-27.0.3
+    - android-27
+    - extra-android-m2repository
+    
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+
+
+# =============== VM configuration ===============
+jdk:
+    - oraclejdk8
+
+sudo: false
+
+
+# =============== Before ===============
+before_install:
+    - chmod +x gradlew
+
+
+# =============== Running ===============
+script:
+    - ./gradlew :clean :puspixl:build
+
+
+# =============== After ===============
+after_success:
+    - ./gradlew :puspixl:cobertura :spitfire:coveralls
+    - ./gradlew :puspixl:bintrayUpload
