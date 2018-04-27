@@ -45,28 +45,6 @@ public class ManifestChecker {
 		return isCompleted;
 	}
 
-	public static boolean checkReceiver(Context context,BroadcastReceiver broadcastReceiver){
-		//Receiver
-		if(!PermissionUtil.checkIfBroadcastReceiverIsRegisteredInManifest(broadcastReceiver.getClass(), context)){
-			NPLog.e("BroadcastReceiver Receiver is not defined in AndroidManifest.xml");
-			return false;
-		}else{
-			return true;
-		}
-
-	}
-
-	public static boolean checkService(Context context,BroadcastReceiver broadcastReceiver){
-
-		//Service
-		if(!PermissionUtil.checkIfServiceIsRegisteredInManifest(broadcastReceiver.getClass(), context)){
-			NPLog.e("BroadcastReceiver Service is not defined in AndroidManifest.xml");
-			return false;
-		}else{
-			return true;
-		}
-	}
-
 	public static String getAppPackage(Context context) {
 		PackageManager manager = context.getPackageManager();
 		PackageInfo info;

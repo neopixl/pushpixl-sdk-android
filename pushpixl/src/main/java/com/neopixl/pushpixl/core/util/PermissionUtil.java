@@ -213,36 +213,4 @@ public class PermissionUtil {
 		return (hasPerm == PackageManager.PERMISSION_GRANTED);  
 	}
 
-	/**
-	 * Check if a broadcastreceiver is defined in Manifest
-	 * @param receiverType
-	 * @param context
-	 * @return if receiver is present
-	 */
-	public static <Receiver extends BroadcastReceiver> boolean checkIfBroadcastReceiverIsRegisteredInManifest(Class<Receiver> receiverType,Context context) {
-		PackageManager pm = context.getPackageManager();
-		try {
-			ActivityInfo info = pm.getReceiverInfo(new ComponentName(context, receiverType), PackageManager.GET_RECEIVERS);
-			return info.enabled;
-		} catch (NameNotFoundException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Check if a service is defined in Manifest
-	 * @param receiverType
-	 * @param context
-	 * @return if receiver is present
-	 */
-	public static <Receiver extends BroadcastReceiver> boolean checkIfServiceIsRegisteredInManifest(Class<Receiver> receiverType,Context context) {
-		PackageManager pm = context.getPackageManager();
-		try {
-			ActivityInfo info = pm.getReceiverInfo(new ComponentName(context, receiverType), PackageManager.GET_SERVICES);
-			return info.enabled;
-		} catch (NameNotFoundException e) {
-			return false;
-		}
-	}
-
 }
