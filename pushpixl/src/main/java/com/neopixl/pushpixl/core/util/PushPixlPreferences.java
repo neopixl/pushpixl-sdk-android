@@ -44,7 +44,7 @@ public class PushPixlPreferences {
 	 */
 	private static String getPackageName()
 	{
-		return DeviceUtil.getAppPackage(getContext());
+		return ManifestChecker.getAppPackage(getContext());
 	}
 
 	/**

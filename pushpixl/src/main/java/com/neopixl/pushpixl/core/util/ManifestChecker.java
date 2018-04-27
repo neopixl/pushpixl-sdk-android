@@ -2,8 +2,11 @@ package com.neopixl.pushpixl.core.util;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.neopixl.logger.NPLog;
+import com.neopixl.pushpixl.core.conf.PushPixlConstant;
 
 public class ManifestChecker {
 
@@ -61,6 +64,18 @@ public class ManifestChecker {
 			return false;
 		}else{
 			return true;
+		}
+	}
+
+	public static String getAppPackage(Context context) {
+		PackageManager manager = context.getPackageManager();
+		PackageInfo info;
+		try {
+			info = manager.getPackageInfo(context.getPackageName(), 0);
+			return info.packageName;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+			return PushPixlConstant.NP_ERROR;
 		}
 	}
 }

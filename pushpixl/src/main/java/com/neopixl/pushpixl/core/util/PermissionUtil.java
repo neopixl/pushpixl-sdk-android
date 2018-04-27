@@ -205,7 +205,7 @@ public class PermissionUtil {
 	 */
 	public static boolean canAccessToC2DMessage(Context context)
 	{
-		String str = DeviceUtil.getAppPackage(context) + ".permission.C2D_MESSAGE";
+		String str = ManifestChecker.getAppPackage(context) + ".permission.C2D_MESSAGE";
 		PackageManager pm = context.getPackageManager();
 		int hasPerm = pm.checkPermission(
 				str,
