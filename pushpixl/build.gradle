@@ -54,15 +54,15 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.google.android.gms:play-services:4.4.52'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.18.3'
     testImplementation 'org.robolectric:robolectric:3.8'
@@ -79,7 +79,7 @@ android.libraryVariants.all { variant ->
     task.dependsOn variant.getJavaCompiler()
     //task.dependsOn javadoc    //Disabled
     task.from variant.getJavaCompiler().destinationDir
-    artifacts.add('archives', task);
+    artifacts.add('archives', task)
     delete("../app/libs/pushpixl.jar")
     copy {
         from 'build/libs/pushpixl.jar'
