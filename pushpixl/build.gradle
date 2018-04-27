@@ -1,26 +1,62 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+apply plugin: "com.github.kt3k.coveralls"
+apply plugin: "net.saliman.cobertura"
+
+
+// =============== Global vars  ===============
+
+def versionNameGlobal = '1.2.4'
+
+// =============== Android configuration  ===============
 
 android {
     compileSdkVersion 27
+    buildToolsVersion "27.0.3"
+    publishNonDefault true
 
+    def p = ['curl', '-u', 'build:E$^VM8476C(XW>Kb6f;b', 'http://tools.neopixl.com/buildnumber/nextBuildNumber.php?project=pushpixl-sdk-android'].execute()
+    def code = p.text.toInteger()
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode code
+        versionName versionNameGlobal
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            testCoverageEnabled true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+            }
+            resources {
+                srcDir 'src/../lib'
+            }
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -28,4 +64,164 @@ dependencies {
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.18.3'
+    testImplementation 'org.robolectric:robolectric:3.8'
 }
+
+// =============== Demo App jar copy  ===============
+
+android.libraryVariants.all { variant ->
+    def name = variant.buildType.name
+    if (name.equals(com.android.builder.core.BuilderConstants.DEBUG)) {
+        return; // Skip debug builds.
+    }
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.getJavaCompiler()
+    //task.dependsOn javadoc    //Disabled
+    task.from variant.getJavaCompiler().destinationDir
+    artifacts.add('archives', task);
+    delete("../app/libs/pushpixl.jar")
+    copy {
+        from 'build/libs/pushpixl.jar'
+        into "../app/libs"
+    }
+}
+
+// =============== Sources parameters  ===============
+
+task sourcesZip(type: Zip) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+
+// =============== Jar parameters  ===============
+
+task jar(type: Jar) {
+    from android.sourceSets.main
+}
+
+task jarDistribution(type: Jar) {
+    from android.sourceSets.main
+}
+
+task fatJar(type: Jar) {
+    baseName = project.name + '-all'
+    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+// =============== Javadoc parameters  ===============
+
+task javadoc(type: Javadoc) {
+    print "Javadoc - 0"
+
+    include '**/*.java'
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    destinationDir = file("../javadoc/")
+    failOnError false
+}
+
+task javadocZip(type: Zip, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+
+
+// =============== Artefact and POM  ===============
+
+artifacts {
+    archives sourcesJar
+    archives sourcesZip
+    archives javadocJar
+    archives javadocZip
+}
+
+
+// Create the pom configuration:
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            name "Neopixl"
+            email "contact@neopixl.com"
+        }
+    }
+
+    scm {
+        url "https://github.com:neopixl/pushpixl-sdk-android"
+    }
+}
+
+
+
+// Create the publication with the pom configuration:
+publishing {
+    publications {
+        PushpixlPublication(MavenPublication) {
+            artifact file("build/libs/pushpixl.jar")
+            artifact sourcesJar
+            artifact javadocJar
+
+
+            groupId 'com.neopixl'
+            artifactId 'pushpixl'
+            version versionNameGlobal
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Pushpixl.io SDK for Android')
+                root.appendNode('name', 'Pushpixl')
+                root.appendNode('url', 'https://neopixl.com')
+
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+
+// =============== Bintray settings  ===============
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['PushpixlPublication']
+
+
+    pkg {
+        repo = 'Pushpixl'
+        name = 'Pushpixl'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/neopixl/pushpixl-sdk-android.git'
+        version {
+            name = versionNameGlobal
+            released  = new Date()
+            vcsTag = versionNameGlobal
+        }
+    }
+}
+
+// =============== Coveralls settings  ===============
+cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report

@@ -29,10 +29,10 @@ before_install:
 
 # =============== Running ===============
 script:
-    - ./gradlew :clean :puspixl:build
+    - ./gradlew :clean :pushpixl:build
 
 
 # =============== After ===============
 after_success:
-    - ./gradlew :puspixl:cobertura :spitfire:coveralls
-    - ./gradlew :puspixl:bintrayUpload
+    - ./gradlew :pushpixl:cobertura :pushpixl:coveralls
+    - ./gradlew :pushpixl:bintrayUpload
