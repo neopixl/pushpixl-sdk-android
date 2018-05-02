@@ -2,6 +2,7 @@ package com.neopixl.pushpixlapp;
 
 import android.app.Application;
 
+import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.model.PushConfiguration;
 
 /**
@@ -23,6 +24,8 @@ public class PushApplication extends Application {
                 .debug(true)
                 .autoRefresh(true)
                 .askBatteryOptimization(true);
+
+        PushpixlManager.
         // END
         // ***
     }

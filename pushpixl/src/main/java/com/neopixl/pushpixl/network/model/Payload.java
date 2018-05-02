@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.Gson;
-import com.neopixl.logger.NPLog;
+import com.neopixl.pushpixl.PushPixlConstant;
 
 public class Payload implements Parcelable {
 
@@ -77,32 +78,32 @@ public class Payload implements Parcelable {
             extras.remove(bodyKey);
 
 			if (deliveryID == null) {
-				NPLog.e("no deliveryID");
+				Log.e(PushPixlConstant.NP_LOG_TAG, "no deliveryID");
 			} else {
 				notification.mId = deliveryID;
 			}
 
 			if (body==null) {
-				NPLog.e("no body");
+				Log.e(PushPixlConstant.NP_LOG_TAG, "no body");
                 body = "";
 			}
 
             notification.mAlert = body;
 
             if(extras.size()==0) {
-                NPLog.e("no extras");
+                Log.e(PushPixlConstant.NP_LOG_TAG, "no extras");
             }
             else {
-                NPLog.d("extras : "+extras);
+				Log.d(PushPixlConstant.NP_LOG_TAG, "extras : "+extras);
 
-                NPLog.d("extras keyset : "+extras.keySet());
+				Log.d(PushPixlConstant.NP_LOG_TAG, "extras keyset : "+extras.keySet());
 
                 notification.mExtras = extras;
             }
 			
 
 		} catch (NullPointerException e) {
-			NPLog.e("no extras from intent");
+			Log.e(PushPixlConstant.NP_LOG_TAG, "no extras from intent");
 			e.printStackTrace();
 		}
 		return notification;

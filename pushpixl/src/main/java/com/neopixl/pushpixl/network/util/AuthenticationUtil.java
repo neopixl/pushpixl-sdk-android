@@ -1,8 +1,9 @@
 package com.neopixl.pushpixl.network.util;
 
 import android.util.Base64;
+import android.util.Log;
 
-import com.neopixl.logger.NPLog;
+import com.neopixl.pushpixl.PushPixlConstant;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class AuthenticationUtil {
         String encodedCredentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
         currentHeaders.put("Authorization", "Basic " + encodedCredentials);
 
-        NPLog.d("credentials : "+encodedCredentials);
+        Log.d(PushPixlConstant.NP_LOG_TAG, "credentials : "+encodedCredentials);
 
         return currentHeaders;
     }
