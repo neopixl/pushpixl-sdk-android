@@ -75,4 +75,12 @@ public class UserPreferencesTest {
         UserPreferences preferences = new UserPreferences(alias)
                 .tags(emptyTags);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void configurationNotHandlingEmptyAlias() throws Exception {
+        List<String> emptyTags = new ArrayList<>();
+        String alias = " ";
+
+        UserPreferences preferences = new UserPreferences(alias);
+    }
 }

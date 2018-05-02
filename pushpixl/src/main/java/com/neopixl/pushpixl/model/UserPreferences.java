@@ -22,6 +22,9 @@ public class UserPreferences {
      * @param alias the ID of the user
      */
     public UserPreferences(@NonNull String alias) {
+        if(alias.trim().isEmpty()) {
+            throw new IllegalArgumentException("The alias cannot be empty");
+        }
         this.alias = alias;
     }
 
