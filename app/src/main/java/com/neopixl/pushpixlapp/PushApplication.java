@@ -25,7 +25,7 @@ public class PushApplication extends Application {
                 .autoRefresh(true)
                 .askBatteryOptimization(true);
 
-        PushpixlManager.
+        PushpixlManager.install(this, configuration);
         // END
         // ***
     }
