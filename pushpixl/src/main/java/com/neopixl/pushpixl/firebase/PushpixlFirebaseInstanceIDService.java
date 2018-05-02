@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.neopixl.pushpixl.PushPixlConstant;
+import com.neopixl.pushpixl.PushpixlManager;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -18,5 +19,9 @@ public class PushpixlFirebaseInstanceIDService extends FirebaseInstanceIdService
 
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.i(PushPixlConstant.NP_LOG_TAG, "New token received from firebase");
+
+        if (PushpixlManager.getInstance().getConfiguration().isAutoRefresh()) {
+            PushpixlManager.getInstance().reloadUserPreferences();
+        }
     }
 }

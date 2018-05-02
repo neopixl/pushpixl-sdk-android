@@ -48,6 +48,9 @@ public class PushpixlManagerTest {
                 UserPreferences.class, UserPreferencesListener.class));
         assertNotNull(PushpixlManager.class.getDeclaredMethod("updateUserPreferences",
                 UserPreferences.class));
+        assertNotNull(PushpixlManager.class.getDeclaredMethod("reloadUserPreferences",
+                UserPreferencesListener.class));
+        assertNotNull(PushpixlManager.class.getDeclaredMethod("reloadUserPreferences"));
     }
 
     @Test

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
+import com.neopixl.pushpixl.exception.NoPreferencesException;
 import com.neopixl.pushpixl.exception.NoTokenException;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
@@ -112,5 +113,31 @@ public class PushpixlManager {
         Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
 
         networkManager.registerDevice(configuration, preferences, token, listener);
+    }
+
+    /**
+     * Update the user data on the Pushpixl servers based on the already saved preferences
+     */
+    public void reloadUserPreferences() {
+        this.reloadUserPreferences(null);
+    }
+
+    /**
+     * Update the user data on the Pushpixl servers based on the already saved preferences
+     * @param listener a listener to handle success and error
+     */
+    public void reloadUserPreferences(@Nullable UserPreferencesListener listener) {
+        Log.i(PushPixlConstant.NP_LOG_TAG, "Trying to reload user preferences");
+
+        UserPreferences preferences = PushPixlPreferences.getUserPreferences(context);
+        if (preferences == null) {
+            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no preferences already saved");
+            if (listener != null) {
+                listener.onUserPreferencesError(preferences, new NoPreferencesException("There is no preferences already saved"));
+            }
+            return;
+        }
+
+        this.updateUserPreferences(preferences, listener);
     }
 }
