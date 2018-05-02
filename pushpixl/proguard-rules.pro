@@ -47,14 +47,11 @@
     !private static *;
 }
 
--keep class com.neopixl.pushpixl.gcm.PushPixlApplication { *; }
 
--keep class com.neopixl.pushpixl.network.model.QuietTimeRequest { *; }
--keep class com.neopixl.pushpixl.network.model.Error { *; }
--keep class com.neopixl.pushpixl.network.model.Payload { *; }
--keep class com.neopixl.pushpixl.network.model.Subscription { *; }
+-keep class com.neopixl.pushpixl.network.model.* { *; }
+-keep class com.neopixl.pushpixl.model.* { *; }
 
--keep class com.neopixl.pushpixl.core.util.PushPixlContext { *; }
+-keep class com.neopixl.pushpixl.PushpixlManager { *; }
 
 -keep public interface com.neopixl.pushpixl.core.RequestListener { *; }
 -keep public class com.neopixl.pushpixl.core.NotificationManager {
@@ -81,8 +78,6 @@
 -keep class com.neopixl.pushpixl.core.util.DeviceUtil { *; }
 -keep class com.neopixl.pushpixl.core.util.PushPixlManifest { *; }
 
--keep public class com.neopixl.logger.NPLog { *; }
-
 -assumenosideeffects class android.util.Log {
     public static *** e(...);
     public static *** w(...);
@@ -90,14 +85,6 @@
     public static *** d(...);
     public static *** v(...);
 }
-
-#-assumenosideeffects class com.neopixl.logger.NPLog {
-#    public static *** e(...);
-#    public static *** w(...);
-#    public static *** wtf(...);
-#    public static *** d(...);
-#    public static *** v(...);
-#}
 
 ## repackage and optimize
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*

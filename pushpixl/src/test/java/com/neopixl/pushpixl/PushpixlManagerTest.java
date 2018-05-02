@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.model.PushConfiguration;
+import com.neopixl.pushpixl.testtools.MockedContext;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class PushpixlManagerTest {
                 .autoRefresh(true)
                 .askBatteryOptimization(true);
 
-        context = null;
+        context = new MockedContext();
     }
 
     @Test
