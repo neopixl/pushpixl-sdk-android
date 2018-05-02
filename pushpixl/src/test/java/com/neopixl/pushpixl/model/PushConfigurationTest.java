@@ -46,7 +46,7 @@ public class PushConfigurationTest {
         assertNotNull(PushConfiguration.class.getDeclaredMethod("getDefaultQuietTime"));
 
         assertNotNull(PushConfiguration.class.getDeclaredConstructor(String.class, String.class, String.class));
-        assertNotNull(PushConfiguration.class.getDeclaredMethod("setHost",
+        assertNotNull(PushConfiguration.class.getDeclaredMethod("hostname",
                 String.class));
         assertNotNull(PushConfiguration.class.getDeclaredMethod("debug",
                 boolean.class));
@@ -91,7 +91,7 @@ public class PushConfigurationTest {
                 token,
                 secret
                 , tenant)
-                .setHost(host)
+                .hostname(host)
                 .debug(debug)
                 .autoRefresh(autoRefresh)
                 .askBatteryOptimization(batteryOptimization)
@@ -105,6 +105,8 @@ public class PushConfigurationTest {
         assertEquals("Should be equals", debug, configuration.isDebug());
         assertEquals("Should be equals", autoRefresh, configuration.isAutoRefresh());
         assertEquals("Should be equals", batteryOptimization, configuration.isAskBatteryOptimization());
+        assertEquals("Should be equals", defaultTags, configuration.getDefaultTags());
+        assertEquals("Should be equals", defaultQuietTime, configuration.getDefaultQuietTime());
     }
 
     @Test(expected = IncorrectConfigurationException.class)

@@ -50,7 +50,7 @@ public class PushConfiguration {
      * @param host the hostname of the server (Ex: pushpixl.io)
      * @return the current configuration
      */
-    public PushConfiguration setHost(@NonNull String host) {
+    public PushConfiguration hostname(@NonNull String host) {
         this.host = host;
         return this;
     }

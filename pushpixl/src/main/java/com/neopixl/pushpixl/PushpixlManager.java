@@ -2,9 +2,12 @@ package com.neopixl.pushpixl;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.model.PushConfiguration;
+import com.neopixl.pushpixl.model.UserPreferences;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -52,5 +55,14 @@ public class PushpixlManager {
     private PushpixlManager(Context context, PushConfiguration configuration) {
         this.context = context.getApplicationContext();
         this.configuration = configuration;
+    }
+
+    public void updateUserPreferences(UserPreferences preferences) {
+        Log.i(PushPixlConstant.NP_LOG_TAG, "Updating user preferences");
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token != null) {
+            Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+        }
+
     }
 }
