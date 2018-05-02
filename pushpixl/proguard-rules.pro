@@ -35,6 +35,15 @@
 #
 #
 
+-keep class com.neopixl.pushpixl.network.model.* { *; }
+-keep class com.neopixl.pushpixl.model.* { *; }
+-keep class com.neopixl.pushpixl.listener.* { *; }
+
+-keep class com.neopixl.pushpixl.PushpixlManager { *; }
+-keep public class com.neopixl.pushpixl.PushPixlConstant { *; }
+
+
+
 -dontwarn org.apache.http.**
 -dontwarn com.android.volley.**
 
@@ -67,11 +76,3 @@
 #
 -adaptclassstrings **
 #-flattenpackagehierarchy ''
-
-
--keep class com.neopixl.pushpixl.network.model.* { *; }
--keep class com.neopixl.pushpixl.model.* { *; }
--keep class com.neopixl.pushpixl.listener.* { *; }
-
--keep class com.neopixl.pushpixl.PushpixlManager { *; }
--keep public class com.neopixl.pushpixl.PushPixlConstant { *; }
