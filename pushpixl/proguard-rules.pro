@@ -49,10 +49,10 @@
 
 -keep class com.neopixl.pushpixl.gcm.PushPixlApplication { *; }
 
--keep class com.neopixl.pushpixl.core.domain.QuietTime { *; }
--keep class com.neopixl.pushpixl.core.domain.Error { *; }
--keep class com.neopixl.pushpixl.core.domain.Payload { *; }
--keep class com.neopixl.pushpixl.core.domain.Subscription { *; }
+-keep class com.neopixl.pushpixl.network.model.QuietTimeRequest { *; }
+-keep class com.neopixl.pushpixl.network.model.Error { *; }
+-keep class com.neopixl.pushpixl.network.model.Payload { *; }
+-keep class com.neopixl.pushpixl.network.model.Subscription { *; }
 
 -keep class com.neopixl.pushpixl.core.util.PushPixlContext { *; }
 
@@ -72,7 +72,7 @@
     !private static *;
 }
 -keep class com.neopixl.pushpixl.gcm.AbstractGCMBroadcastReceiver { *; }
--keep public class com.neopixl.pushpixl.core.conf.PushPixlConstant { *; }
+-keep public class com.neopixl.pushpixl.PushPixlConstant { *; }
 -keep public interface com.neopixl.pushpixl.core.util.GCMUtilRegistrationListener { *; }
 
 #Util
