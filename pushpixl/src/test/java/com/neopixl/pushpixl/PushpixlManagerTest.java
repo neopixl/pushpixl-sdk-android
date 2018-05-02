@@ -3,7 +3,9 @@ package com.neopixl.pushpixl;
 import android.content.Context;
 
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
+import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
+import com.neopixl.pushpixl.model.UserPreferences;
 import com.neopixl.pushpixl.testtools.MockedContext;
 
 import org.junit.Before;
@@ -37,10 +39,13 @@ public class PushpixlManagerTest {
     public void publicMethods() throws Exception {
         // Catch-all test to find API-breaking changes.
         assertNotNull(PushpixlManager.class.getDeclaredMethod("getInstance"));
+        assertNotNull(PushpixlManager.class.getDeclaredMethod("getConfiguration"));
 
         assertNotNull(PushpixlManager.class.getDeclaredConstructor(Context.class, PushConfiguration.class));
         assertNotNull(PushpixlManager.class.getDeclaredMethod("install",
                 Context.class, PushConfiguration.class));
+        assertNotNull(PushpixlManager.class.getDeclaredMethod("updateUserPreferences",
+                UserPreferences.class, UserPreferencesListener.class));
     }
 
     @Test

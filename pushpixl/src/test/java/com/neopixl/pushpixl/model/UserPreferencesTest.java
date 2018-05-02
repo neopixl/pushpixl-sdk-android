@@ -76,6 +76,16 @@ public class UserPreferencesTest {
                 .tags(emptyTags);
     }
 
+    @Test(expected = IncorrectConfigurationException.class)
+    public void configurationNotHandlingSpecialTags() throws Exception {
+        List<String> tagList = new ArrayList<>();
+        tagList.add("test:noWorking");
+        String alias = "user123";
+
+        UserPreferences preferences = new UserPreferences(alias)
+                .tags(tagList);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void configurationNotHandlingEmptyAlias() throws Exception {
         List<String> emptyTags = new ArrayList<>();

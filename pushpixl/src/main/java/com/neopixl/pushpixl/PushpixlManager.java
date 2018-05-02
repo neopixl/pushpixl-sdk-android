@@ -2,10 +2,12 @@ package com.neopixl.pushpixl;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
+import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
 import com.neopixl.pushpixl.model.UserPreferences;
 
@@ -57,7 +59,22 @@ public class PushpixlManager {
         this.configuration = configuration;
     }
 
-    public void updateUserPreferences(UserPreferences preferences) {
+    /**
+     *  Get the current used configuration
+     * @return the push configuration
+     */
+    @NonNull
+    public PushConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    /**
+     * Update the user data on the Pushpixl servers
+     *
+     * @param preferences the preference of the current user
+     * @param listener a listener to handle success and error
+     */
+    public void updateUserPreferences(@NonNull UserPreferences preferences, @Nullable UserPreferencesListener listener) {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Updating user preferences");
         String token = FirebaseInstanceId.getInstance().getToken();
         if (token != null) {

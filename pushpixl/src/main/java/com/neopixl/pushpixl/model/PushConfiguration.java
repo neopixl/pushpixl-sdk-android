@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
+import com.neopixl.pushpixl.network.model.Tag;
 
 import java.util.List;
 
@@ -101,8 +102,8 @@ public class PushConfiguration {
      * @return the current configuration
      */
     public PushConfiguration defaultTags(@Nullable List<String> defaultTags) {
-        if (defaultTags != null && defaultTags.isEmpty()) {
-            throw new IncorrectConfigurationException("Cannot set defaultTags to empty");
+        if (!Tag.isValid(defaultTags)) {
+            throw new IncorrectConfigurationException("Cannot set defaultTags to empty, and they cannot containt the char `:`");
         }
 
         this.defaultTags = defaultTags;

@@ -1,6 +1,6 @@
 package com.neopixl.pushpixl.model;
 
-import com.neopixl.pushpixl.exception.IllegalValueException;
+import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,19 +52,19 @@ public class QuietTime {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
 
         if(startHour<0 || startHour>=24) {
-            throw new IllegalValueException("startHour value should should be equal or greater than 0 and less than 24.");
+            throw new IncorrectConfigurationException("startHour value should should be equal or greater than 0 and less than 24.");
         }
 
         if(startMinute<0 || startMinute>=60) {
-            throw new IllegalValueException("startMinute value should be equal or greater than 0 and less than 60.");
+            throw new IncorrectConfigurationException("startMinute value should be equal or greater than 0 and less than 60.");
         }
 
         if(endHour<0 || endHour>=24) {
-            throw  new IllegalValueException("endHour value should should be equal or greater than 0 and less than 24.");
+            throw  new IncorrectConfigurationException("endHour value should should be equal or greater than 0 and less than 24.");
         }
 
         if(endMinute<0 || endMinute>=60) {
-            throw new IllegalValueException("endMinute value should be equal or greater than 0 and less than 60.");
+            throw new IncorrectConfigurationException("endMinute value should be equal or greater than 0 and less than 60.");
         }
 
         int year = gregorianCalendar.get(Calendar.YEAR);

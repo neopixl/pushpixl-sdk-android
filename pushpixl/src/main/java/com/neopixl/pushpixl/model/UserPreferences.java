@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
+import com.neopixl.pushpixl.network.model.Tag;
 
 import java.util.List;
 
@@ -50,8 +51,8 @@ public class UserPreferences {
      * @return the current preferences
      */
     public UserPreferences tags(@Nullable List<String> tags) {
-        if (tags != null && tags.isEmpty()) {
-            throw new IncorrectConfigurationException("Cannot set defaultTags to empty");
+        if (!Tag.isValid(tags)) {
+            throw new IncorrectConfigurationException("Cannot set defaultTags to empty, and they cannot containt the char `:`");
         }
 
         this.tags = tags;

@@ -119,4 +119,16 @@ public class PushConfigurationTest {
                 , "neopixl")
                 .defaultTags(emptyTags);
     }
+
+    @Test(expected = IncorrectConfigurationException.class)
+    public void configurationNotHandlingSpecialTags() throws Exception {
+        List<String> tagList = new ArrayList<>();
+        tagList.add("test:noWorking");
+
+        PushConfiguration configuration = new PushConfiguration(
+                "50465c62-a3e5-4bfb-9aa6-528395d3800e",
+                "208b23a5-3aed-49fe-b999-f2ece02656dc"
+                , "neopixl")
+                .defaultTags(tagList);
+    }
 }
