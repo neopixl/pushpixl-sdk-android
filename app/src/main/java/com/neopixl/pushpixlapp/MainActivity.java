@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.exception.PushpixlException;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
+import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
 import com.neopixl.pushpixl.model.UserPreferences;
 import com.neopixl.pushpixl.model.QuietTime;
 
@@ -26,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button reloadButton = findViewById(R.id.reload_prefs);
         reloadButton.setOnClickListener(v -> reloadUserPreferences());
+
+        Button removeButton = findViewById(R.id.remove_prefs);
+        removeButton.setOnClickListener(v -> removeUserPreferences());
     }
 
     public void updateUserPreferences() {
@@ -61,6 +65,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onUserPreferencesError(UserPreferences userPreferences, PushpixlException e) {
+                Log.d(TAG, "Error occur", e);
+                Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_SHORT).show();
+            }
+        });
+        // END
+        // ***
+    }
+
+    public void removeUserPreferences() {
+        // ***
+        // ADDED FOR LIBRARY
+        PushpixlManager.getInstance().removeUserPreferences(new UserPreferencesRemoveListener() {
+            @Override
+            public void onUserPreferencesRemoved(String s) {
+                Toast.makeText(MainActivity.this, "Preference removed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onUserPreferencesRemoveError(PushpixlException e) {
                 Log.d(TAG, "Error occur", e);
                 Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_SHORT).show();
             }

@@ -9,7 +9,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.NoPreferencesException;
 import com.neopixl.pushpixl.exception.NoTokenException;
+import com.neopixl.pushpixl.exception.PushpixlException;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
+import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
 import com.neopixl.pushpixl.model.UserPreferences;
 import com.neopixl.pushpixl.network.NetworkManager;
@@ -139,5 +141,50 @@ public class PushpixlManager {
         }
 
         this.updateUserPreferences(preferences, listener);
+    }
+
+    /**
+     * Remove the user data on the pushpixl servers based on the firebase token
+     */
+    public void removeUserPreferences() {
+        this.removeUserPreferences(null);
+    }
+
+    /**
+     * Remove the user data on the pushpixl servers based on the firebase token
+     * @param listener a listener to handle success and error
+     */
+    public void removeUserPreferences(@Nullable final UserPreferencesRemoveListener listener) {
+        Log.i(PushPixlConstant.NP_LOG_TAG, "Removing user preferences");
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token == null) {
+            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+            if (listener != null) {
+                listener.onUserPreferencesRemoveError(new NoTokenException("There is no firebase token, nothing have been sent to the server"));
+            }
+            return;
+        }
+
+        Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+
+        networkManager.unregisterDevice(configuration, token, new UserPreferencesRemoveListener() {
+            @Override
+            public void onUserPreferencesRemoved(String token) {
+                PushPixlPreferences.setUserPreferences(context, null);
+
+                if (listener != null) {
+                    listener.onUserPreferencesRemoved(token);
+                }
+            }
+
+            @Override
+            public void onUserPreferencesRemoveError(PushpixlException exception) {
+                if (listener != null) {
+                    listener.onUserPreferencesRemoveError(exception);
+                }
+            }
+        });
+
     }
 }

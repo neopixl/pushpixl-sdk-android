@@ -25,9 +25,14 @@ public class PushPixlPreferences {
 	public static void setUserPreferences(Context context, UserPreferences value){
 		SharedPreferences preferences = context.getSharedPreferences(PUSHPIXL_PREF, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = preferences.edit();
-		Gson gson = new Gson();
-		String json = gson.toJson(value); //
-		editor.putString(KEY_USER_PREFS, json);
+
+		if (value != null) {
+			Gson gson = new Gson();
+			String json = gson.toJson(value); //
+			editor.putString(KEY_USER_PREFS, json);
+		} else {
+			editor.remove(KEY_USER_PREFS);
+		}
 		editor.apply();
 	}
 

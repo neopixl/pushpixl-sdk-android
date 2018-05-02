@@ -50,11 +50,11 @@ public class URLBuilder {
 
 	/**
 	 * Get Unsubscription url
-	 * @param registrationId
+	 * @param token
 	 * @return
 	 */
-	public String getUnsubscriptionUrl(String registrationId) {
-		return getBaseUrl()+"/"+URL_REGISTRATION+"/"+registrationId;
+	public String getUnsubscriptionUrl(String token) {
+		return getBaseUrl()+"/"+URL_REGISTRATION+"/"+token;
 	}
 
 	/**

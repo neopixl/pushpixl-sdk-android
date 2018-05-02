@@ -13,11 +13,13 @@ import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.PushNetworkException;
 import com.neopixl.pushpixl.exception.PushpixlException;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
+import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
 import com.neopixl.pushpixl.model.QuietTime;
 import com.neopixl.pushpixl.model.UserPreferences;
 import com.neopixl.pushpixl.network.model.Subscription;
 import com.neopixl.pushpixl.network.request.PushPixlJsonRequest;
+import com.neopixl.pushpixl.network.request.PushPixlRequest;
 import com.neopixl.pushpixl.network.util.URLBuilder;
 import com.neopixl.pushpixl.util.TagsUtil;
 
@@ -93,6 +95,35 @@ public class NetworkManager {
         });
 
         request.setTag("register");
+        request.addUserAndPassword(configuration.getToken(), configuration.getSecret());
+
+        requestQueue.add(request);
+    }
+
+    public void unregisterDevice(final PushConfiguration configuration, final String token, final UserPreferencesRemoveListener listener) {
+        String urlUnregister = URLBuilder.getInstance().getUnsubscriptionUrl(token);
+
+        PushPixlRequest request = new PushPixlRequest(Request.Method.DELETE, urlUnregister, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (listener != null) {
+                    listener.onUserPreferencesRemoved(token);
+                } else {
+                    Log.d(PushPixlConstant.NP_LOG_TAG, "device is now registered!");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                if (listener != null) {
+                    PushpixlException pushpixlException = new PushNetworkException("Web request went wrong", volleyError, volleyError.networkResponse);
+                    listener.onUserPreferencesRemoveError(pushpixlException);
+                }
+            }
+        });
+
+        request.setTag("unregister");
         request.addUserAndPassword(configuration.getToken(), configuration.getSecret());
 
         requestQueue.add(request);
