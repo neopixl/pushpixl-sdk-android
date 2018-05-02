@@ -47,37 +47,6 @@
     !private static *;
 }
 
-
--keep class com.neopixl.pushpixl.network.model.* { *; }
--keep class com.neopixl.pushpixl.model.* { *; }
-
--keep class com.neopixl.pushpixl.PushpixlManager { *; }
-
--keep public interface com.neopixl.pushpixl.core.RequestListener { *; }
--keep public class com.neopixl.pushpixl.core.NotificationManager {
-    public *;
-    !static !transient <fields>;
-    !private <methods>;
-    !private static *;
-}
-    #!private <fields>;
-    #!private <methods>;
-
--keep public class com.neopixl.pushpixl.core.handler.NotificationHandler {
-    public *;
-    !private <methods>;
-    !private static *;
-}
--keep class com.neopixl.pushpixl.gcm.AbstractGCMBroadcastReceiver { *; }
--keep public class com.neopixl.pushpixl.PushPixlConstant { *; }
--keep public interface com.neopixl.pushpixl.core.util.GCMUtilRegistrationListener { *; }
-
-#Util
--keep class com.neopixl.pushpixl.core.util.GCMUtil { *; }
--keep class com.neopixl.pushpixl.core.util.PushPixlPreferences { *; }
--keep class com.neopixl.pushpixl.core.util.DeviceUtil { *; }
--keep class com.neopixl.pushpixl.core.util.PushPixlManifest { *; }
-
 -assumenosideeffects class android.util.Log {
     public static *** e(...);
     public static *** w(...);
@@ -98,3 +67,11 @@
 #
 -adaptclassstrings **
 #-flattenpackagehierarchy ''
+
+
+-keep class com.neopixl.pushpixl.network.model.* { *; }
+-keep class com.neopixl.pushpixl.model.* { *; }
+-keep class com.neopixl.pushpixl.listener.* { *; }
+
+-keep class com.neopixl.pushpixl.PushpixlManager { *; }
+-keep public class com.neopixl.pushpixl.PushPixlConstant { *; }

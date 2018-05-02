@@ -1,18 +1,19 @@
 package com.neopixl.pushpixlapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.RemoteMessage;
 import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.exception.PushpixlException;
+import com.neopixl.pushpixl.listener.ReadConfirmationListener;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
-import com.neopixl.pushpixl.model.UserPreferences;
 import com.neopixl.pushpixl.model.QuietTime;
+import com.neopixl.pushpixl.model.UserPreferences;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -30,6 +31,28 @@ public class MainActivity extends AppCompatActivity {
 
         Button removeButton = findViewById(R.id.remove_prefs);
         removeButton.setOnClickListener(v -> removeUserPreferences());
+
+        // ***
+        // ADDED FOR LIBRARY
+        if (getIntent().getExtras() != null) {
+            RemoteMessage remoteMessage = getIntent().getExtras().getParcelable("remote_message");
+            if (remoteMessage != null) {
+                PushpixlManager.getInstance().confirmReading(remoteMessage, new ReadConfirmationListener() {
+                    @Override
+                    public void onMessageMarkedAsReadSuccess(String s, String s1) {
+                        Toast.makeText(MainActivity.this, "Notification marked read", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onMessageMarkedAsReadError(String s, PushpixlException e) {
+                        Log.d(TAG, "Error occur", e);
+                        Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+        // END
+        // ***
     }
 
     public void updateUserPreferences() {

@@ -23,6 +23,8 @@ public class PushApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        NotificationUtil.init(this);
+
         // ***
         // ADDED FOR LIBRARY
         PushConfiguration configuration = new PushConfiguration(

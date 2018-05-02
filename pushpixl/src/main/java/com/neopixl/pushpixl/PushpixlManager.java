@@ -1,15 +1,21 @@
 package com.neopixl.pushpixl;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.RemoteMessage;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.NoPreferencesException;
 import com.neopixl.pushpixl.exception.NoTokenException;
 import com.neopixl.pushpixl.exception.PushpixlException;
+import com.neopixl.pushpixl.listener.ReadConfirmationListener;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
@@ -25,7 +31,6 @@ import java.net.URL;
  * For Neopixl
  */
 public class PushpixlManager {
-
     private static PushpixlManager _instance;
 
     /**
@@ -48,8 +53,7 @@ public class PushpixlManager {
      * @return the new PushpixlManager
      */
     public static PushpixlManager install(@NonNull Context context, @NonNull PushConfiguration configuration) {
-        PushpixlManager pushpixlManager = new PushpixlManager(context, configuration);
-        _instance = pushpixlManager;
+        _instance = new PushpixlManager(context, configuration);
 
         URLBuilder.setConfiguration(configuration);
 
@@ -67,7 +71,7 @@ public class PushpixlManager {
      * @param context the application context
      * @param configuration the configuration for the manager
      */
-    private PushpixlManager(Context context, PushConfiguration configuration) {
+    private PushpixlManager(@NonNull Context context, @NonNull PushConfiguration configuration) {
         this.context = context.getApplicationContext();
         this.configuration = configuration;
         networkManager = new NetworkManager(this.context);
@@ -185,6 +189,49 @@ public class PushpixlManager {
                 }
             }
         });
+    }
 
+    /**
+     * Mark the current message as `read` helpfull for statistics
+     * @param remoteMessage the message
+     */
+    public void confirmReading(@NonNull RemoteMessage remoteMessage) {
+        confirmReading(remoteMessage, null);
+    }
+
+    /**
+     * Mark the current message as `read` helpfull for statistics
+     * @param remoteMessage the message
+     * @param listener a listener to handle success and error
+     */
+    public void confirmReading(@NonNull RemoteMessage remoteMessage, ReadConfirmationListener listener) {
+        confirmReading(remoteMessage.getMessageId(), listener);
+    }
+
+    /**
+     * Mark the current message as `read` helpfull for statistics
+     * @param messageId the message ID
+     */
+    public void confirmReading(@NonNull String messageId) {
+        confirmReading(messageId, null);
+    }
+
+    /**
+     * Mark the current message as `read` helpfull for statistics
+     * @param messageId the message ID
+     * @param listener a listener to handle success and error
+     */
+    public void confirmReading(@NonNull String messageId, ReadConfirmationListener listener) {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token == null) {
+            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+            if (listener != null) {
+                listener.onMessageMarkedAsReadError(messageId, new NoTokenException("There is no firebase token, nothing have been sent to the server"));
+            }
+            return;
+        }
+
+        Log.i(PushPixlConstant.NP_LOG_TAG, "handle notification id : "+messageId);
+        networkManager.confirmReading(configuration, token, messageId, listener);
     }
 }

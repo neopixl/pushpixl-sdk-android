@@ -12,6 +12,7 @@ import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.PushNetworkException;
 import com.neopixl.pushpixl.exception.PushpixlException;
+import com.neopixl.pushpixl.listener.ReadConfirmationListener;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
@@ -124,6 +125,37 @@ public class NetworkManager {
         });
 
         request.setTag("unregister");
+        request.addUserAndPassword(configuration.getToken(), configuration.getSecret());
+
+        requestQueue.add(request);
+    }
+
+    public void confirmReading(final PushConfiguration configuration, final String token, final String messageId, final ReadConfirmationListener listener) {
+        String urlConfirmReading = URLBuilder.getInstance().getReadMessageUrl();
+
+        PushPixlRequest request = new PushPixlRequest(Request.Method.POST,urlConfirmReading,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String string) {
+                if (listener != null) {
+                    listener.onMessageMarkedAsReadSuccess(token, messageId);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                if (listener != null) {
+                    PushpixlException pushpixlException = new PushNetworkException("Web request went wrong", volleyError, volleyError.networkResponse);
+                    listener.onMessageMarkedAsReadError(messageId, pushpixlException);
+                }
+            }
+        });
+
+        request.addParameter("deviceToken", token);
+        request.addParameter("notificationId",messageId);
+        request.addParameter("provider",PushPixlConstant.NP_SUBSCRIBTION_TYPE);
+
+        request.setTag("CONFIRM_READING");
         request.addUserAndPassword(configuration.getToken(), configuration.getSecret());
 
         requestQueue.add(request);
