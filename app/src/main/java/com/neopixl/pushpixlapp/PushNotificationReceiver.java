@@ -17,7 +17,6 @@ import java.util.Map;
 public class PushNotificationReceiver extends FirebaseMessagingService {
     private static final String TAG = PushNotificationReceiver.class.getSimpleName();
 
-    private static final String NOTIFICATION_KEY_EVENT_TYPE = "EVENT_TYPE";
     private static final int REQUEST_CODE_NOTIFICATION_PUSH = 1;
     private static final int NOTIFICATION_DEFAULT_ID = 1;
 
