@@ -28,6 +28,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     buildTypes {
         release {
             testCoverageEnabled true
@@ -62,6 +66,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:support-annotations:26.1.0'
+    implementation 'com.google.code.gson:gson:2.2.3'
     //implementation 'com.google.firebase:firebase-messaging:15.0.0'
     compileOnly("com.google.firebase:firebase-core:15.0.0") {
         exclude group: 'org.json', module: 'json'
@@ -198,6 +203,18 @@ publishing {
                 root.appendNode('description', 'Pushpixl.io SDK for Android')
                 root.appendNode('name', 'Pushpixl')
                 root.appendNode('url', 'https://neopixl.com')
+
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.implementation.allDependencies.each {
+                    if (it.group != null && it.name != null && it.group.startsWith("com.google.code.gson:gson")) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
 
                 root.children().last() + pomConfig
             }

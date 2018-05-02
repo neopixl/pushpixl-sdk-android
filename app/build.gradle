@@ -39,6 +39,9 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.android.support:multidex:1.0.3'
 
+    implementation 'com.google.code.gson:gson:2.2.3' // DEPENDANCE ADDED BY MAVEN
+
+    implementation 'com.android.volley:volley:1.0.0' // ADDED FOR LIBRARY
     implementation 'com.google.firebase:firebase-messaging:15.0.0' // ADDED FOR LIBRARY
 }
 

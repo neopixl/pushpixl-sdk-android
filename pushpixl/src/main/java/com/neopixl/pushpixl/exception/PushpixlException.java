@@ -3,6 +3,8 @@ package com.neopixl.pushpixl.exception;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.android.volley.NetworkResponse;
+
 /**
  * Created by Florian ALONSO on 5/2/18.
  * For Neopixl

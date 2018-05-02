@@ -6,6 +6,7 @@ import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.model.QuietTime;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 public class Subscription {
@@ -14,14 +15,14 @@ public class Subscription {
     private String alias;
 	private String deviceToken;
 	private boolean valid;
-	private ArrayList<String> tags;
+	private List<String> tags;
 	private String startQuietTime;
 	private String endQuietTime;
 	private boolean disabled;
 	private String timezone;
     private boolean production;
 
-	public Subscription(String alias, String newDeviceToken, QuietTime quietTimeRequest, ArrayList<String> tagsList, boolean valid, boolean disabled, boolean production) {
+	public Subscription(String alias, String newDeviceToken, QuietTime quietTimeRequest, List<String> tagsList, boolean valid, boolean disabled, boolean production) {
 		super();
 		this.setStartQuietTime(quietTimeRequest.getStartTime());
 		this.setEndQuietTime(quietTimeRequest.getEndTime());
@@ -92,11 +93,11 @@ public class Subscription {
 		this.valid = valid;
 	}
 
-	public ArrayList<String> getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 
-	public void setTags(ArrayList<String> tags) {
+	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
 

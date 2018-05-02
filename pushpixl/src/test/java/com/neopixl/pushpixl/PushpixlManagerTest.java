@@ -46,6 +46,8 @@ public class PushpixlManagerTest {
                 Context.class, PushConfiguration.class));
         assertNotNull(PushpixlManager.class.getDeclaredMethod("updateUserPreferences",
                 UserPreferences.class, UserPreferencesListener.class));
+        assertNotNull(PushpixlManager.class.getDeclaredMethod("updateUserPreferences",
+                UserPreferences.class));
     }
 
     @Test
@@ -53,6 +55,7 @@ public class PushpixlManagerTest {
         PushpixlManager manager = PushpixlManager.install(context, configuration);
 
         assertEquals("The instance should be the same", manager, PushpixlManager.getInstance());
+        String alias = "user123";
     }
 
     @Test(expected = IncorrectConfigurationException.class)

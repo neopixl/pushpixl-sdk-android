@@ -7,9 +7,15 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
+import com.neopixl.pushpixl.exception.NoTokenException;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.model.PushConfiguration;
 import com.neopixl.pushpixl.model.UserPreferences;
+import com.neopixl.pushpixl.network.NetworkManager;
+import com.neopixl.pushpixl.network.util.URLBuilder;
+import com.neopixl.pushpixl.util.PushPixlPreferences;
+
+import java.net.URL;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -41,12 +47,16 @@ public class PushpixlManager {
     public static PushpixlManager install(@NonNull Context context, @NonNull PushConfiguration configuration) {
         PushpixlManager pushpixlManager = new PushpixlManager(context, configuration);
         _instance = pushpixlManager;
+
+        URLBuilder.setConfiguration(configuration);
+
         return getInstance();
     }
 
 
     @NonNull private Context context;
     @NonNull private PushConfiguration configuration;
+    private NetworkManager networkManager;
 
     /**
      * Default constructor for installation
@@ -57,6 +67,7 @@ public class PushpixlManager {
     private PushpixlManager(Context context, PushConfiguration configuration) {
         this.context = context.getApplicationContext();
         this.configuration = configuration;
+        networkManager = new NetworkManager(this.context);
     }
 
     /**
@@ -72,14 +83,34 @@ public class PushpixlManager {
      * Update the user data on the Pushpixl servers
      *
      * @param preferences the preference of the current user
+     */
+    public void updateUserPreferences(@NonNull UserPreferences preferences) {
+        this.updateUserPreferences(preferences, null);
+    }
+
+    /**
+     * Update the user data on the Pushpixl servers
+     *
+     * @param preferences the preference of the current user
      * @param listener a listener to handle success and error
      */
     public void updateUserPreferences(@NonNull UserPreferences preferences, @Nullable UserPreferencesListener listener) {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Updating user preferences");
+
+        PushPixlPreferences.setUserPreferences(context, preferences);
+
         String token = FirebaseInstanceId.getInstance().getToken();
-        if (token != null) {
-            Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+
+        if (token == null) {
+            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+            if (listener != null) {
+                listener.onUserPreferencesError(preferences, new NoTokenException("There is no firebase token, the preferences will be uploaded automaticatly if the configuration is in `autoRefresh` mode"));
+            }
+            return;
         }
 
+        Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+
+        networkManager.registerDevice(configuration, preferences, token, listener);
     }
 }
