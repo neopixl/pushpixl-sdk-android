@@ -42,6 +42,7 @@
 
 -keep class com.neopixl.pushpixl.PushpixlManager { *; }
 -keep public class com.neopixl.pushpixl.PushPixlConstant { *; }
+-keep public class com.neopixl.pushpixl.firebase.PushpixlFirebaseInstanceIDService { *; }
 
 
 
