@@ -1,7 +1,7 @@
 package com.neopixl.pushpixl.util;
 
 import android.os.Build;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.neopixl.pushpixl.BuildConfig;
 

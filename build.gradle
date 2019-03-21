@@ -11,12 +11,12 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3' // Used for bintray
         classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2" // Used for coverall
         classpath 'net.saliman:gradle-cobertura-plugin:2.5.4' // Used for coverall
 
-        classpath 'com.google.gms:google-services:3.2.0' // ADDED FOR LIBRARY
+        classpath 'com.google.gms:google-services:4.2.0' // ADDED FOR LIBRARY
         
 
         // NOTE: Do not place your application dependencies here; they belong

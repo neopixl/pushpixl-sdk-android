@@ -3,6 +3,7 @@ package com.neopixl.pushpixl.network;
 import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.model.QuietTime;
 import com.neopixl.pushpixl.network.model.Subscription;
+import com.neopixl.pushpixl.network.model.Tag;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Florian ALONSO on 4/27/18.
@@ -63,7 +65,11 @@ public class SubscriptionTest {
         assertEquals(subscription.getDeviceToken(), stringDeviceToken);
         assertEquals(subscription.getStartQuietTime(), quietTimeRequest.getStartTime());
         assertEquals(subscription.getEndQuietTime(), quietTimeRequest.getEndTime());
-        assertEquals(subscription.getTags(), tags);
         assertEquals(subscription.getType(), PushPixlConstant.NP_SUBSCRIBTION_TYPE);
+
+        // Checking all tags are present
+        for (Tag tag : subscription.getTags()) {
+            assertTrue("The tag should be present", tags.contains(tag.getTagName()));
+        }
     }
 }

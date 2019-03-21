@@ -4,6 +4,7 @@ import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -12,22 +13,21 @@ import java.util.Locale;
  * For Neopixl
  */
 public class QuietTime {
-    private static final String dateFormat = "HH:mmZZZZZ"; //"HH:mmSZ";
 
-    private String mStartTime;
-    private String mEndTime;
+    private Date mStartTime;
+    private Date mEndTime;
 
     /**
      * @return the startTime
      */
-    public String getStartTime() {
+    public Date getStartTime() {
         return mStartTime;
     }
 
     /**
      * @return the endTime
      */
-    public String getEndTime() {
+    public Date getEndTime() {
         return mEndTime;
     }
 
@@ -74,14 +74,8 @@ public class QuietTime {
         GregorianCalendar startCalendar = new GregorianCalendar(year, month, day, startHour, startMinute, 00);
         GregorianCalendar endCalendar = new GregorianCalendar(year, month, day, endHour, endMinute, 00);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.getDefault());
-        String startTimeValue = simpleDateFormat.format(startCalendar.getTime());
-        String endTimeValue = simpleDateFormat.format(endCalendar.getTime());
-
-        startTimeValue = startTimeValue.replace("0+", "-");
-        endTimeValue = endTimeValue.replace("0+", "-");
-        mStartTime = startTimeValue;
-        mEndTime = endTimeValue;
+        mStartTime = startCalendar.getTime();
+        mEndTime = endCalendar.getTime();
     }
 
     @Override

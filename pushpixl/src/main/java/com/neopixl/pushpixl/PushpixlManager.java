@@ -1,12 +1,9 @@
 package com.neopixl.pushpixl;
 
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -25,7 +22,6 @@ import com.neopixl.pushpixl.network.NetworkManager;
 import com.neopixl.pushpixl.network.util.URLBuilder;
 import com.neopixl.pushpixl.util.PushPixlPreferences;
 
-import java.net.URL;
 import java.util.Map;
 
 /**

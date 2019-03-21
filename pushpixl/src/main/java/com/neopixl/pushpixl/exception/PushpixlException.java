@@ -1,9 +1,7 @@
 package com.neopixl.pushpixl.exception;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-
-import com.android.volley.NetworkResponse;
+import androidx.annotation.RequiresApi;
 
 /**
  * Created by Florian ALONSO on 5/2/18.

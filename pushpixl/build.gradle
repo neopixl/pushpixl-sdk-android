@@ -25,7 +25,7 @@ android {
         versionCode code
         versionName versionNameGlobal
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     testOptions {
@@ -65,15 +65,16 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    compileOnly("com.google.firebase:firebase-messaging:15.0.0") {
+    implementation 'androidx.annotation:annotation:1.0.2'
+
+    compileOnly("com.google.firebase:firebase-messaging:17.4.0") {
         exclude group: 'org.json', module: 'json'
     }
-    testImplementation("com.google.firebase:firebase-messaging:15.0.0") {
+    testImplementation("com.google.firebase:firebase-messaging:17.4.0") {
         exclude group: 'org.json', module: 'json'
     }
 
+    implementation 'com.neopixl:spitfire:2.0.0-alpha5'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.18.3'
@@ -210,7 +211,7 @@ publishing {
 
                 //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
                 configurations.implementation.allDependencies.each {
-                    if (it.group != null && it.name != null && it.group.startsWith("com.google.code.gson:gson")) {
+                    if (it.group != null && it.name != null && it.group.startsWith("com.neopixl:spitfire")) {
                         def dependencyNode = dependenciesNode.appendNode('dependency')
                         dependencyNode.appendNode('groupId', it.group)
                         dependencyNode.appendNode('artifactId', it.name)
