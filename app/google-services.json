@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "692076437176",
+    "firebase_url": "https://pushpixlapp.firebaseio.com",
+    "project_id": "pushpixlapp",
+    "storage_bucket": "pushpixlapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692076437176:android:bcdc02a48f1b76e6",
+        "android_client_info": {
+          "package_name": "com.neopixl.pushpixlapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692076437176-u25915u249kbusnku06n9bjmguavo6dt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCGLYClPOXnS1nFH8jpdsso8Km86cShq0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
