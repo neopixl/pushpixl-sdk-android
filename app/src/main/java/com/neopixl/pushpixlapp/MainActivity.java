@@ -9,11 +9,15 @@ import android.widget.Toast;
 import com.google.firebase.messaging.RemoteMessage;
 import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.exception.PushpixlException;
+import com.neopixl.pushpixl.listener.NotificationSendListener;
 import com.neopixl.pushpixl.listener.ReadConfirmationListener;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
 import com.neopixl.pushpixl.model.QuietTime;
 import com.neopixl.pushpixl.model.UserPreferences;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -31,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button removeButton = findViewById(R.id.remove_prefs);
         removeButton.setOnClickListener(v -> removeUserPreferences());
+
+        Button sendToMySelfButton = findViewById(R.id.send_to_myself);
+        sendToMySelfButton.setOnClickListener(v -> sendToMySelf());
 
         // ***
         // ADDED FOR LIBRARY
@@ -58,8 +65,12 @@ public class MainActivity extends AppCompatActivity {
     public void updateUserPreferences() {
         // ***
         // ADDED FOR LIBRARY
-        UserPreferences preferences = new UserPreferences("user123")
-                .quietTime(new QuietTime(22,0,5,0));
+        List<String> tags = new ArrayList<>();
+        tags.add("THISISATAGS");
+
+        UserPreferences preferences = new UserPreferences("jerome")
+                .quietTime(new QuietTime(22,0,5,0))
+                .tags(tags);
 
         PushpixlManager.getInstance().updateUserPreferences(preferences, new UserPreferencesListener() {
             @Override
@@ -108,6 +119,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onUserPreferencesRemoveError(PushpixlException e) {
                 Log.d(TAG, "Error occur", e);
+                Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_SHORT).show();
+            }
+        });
+        // END
+        // ***
+    }
+
+    public void sendToMySelf() {
+        // ***
+        // ADDED FOR LIBRARY
+        PushpixlManager.getInstance().pushToMySelf("This is a test notification", new NotificationSendListener() {
+            @Override
+            public void onNotificationSent(String s, String s1) {
+                Toast.makeText(MainActivity.this, "Notification sent", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNotificationError(String s, PushpixlException e) {
+                Log.e(TAG, "Error occur", e);
                 Toast.makeText(MainActivity.this, "An error occured", Toast.LENGTH_SHORT).show();
             }
         });

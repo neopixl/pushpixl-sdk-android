@@ -6,6 +6,7 @@ import com.neopixl.pushpixl.model.PushConfiguration;
 public class URLBuilder {
 
 	private static String HTTPS_URL_PROTOCOL = "https://";
+	private static String HTTP_URL_PROTOCOL = "http://";
 
 	private static String PATH_WS = "ws";
 
@@ -34,7 +35,7 @@ public class URLBuilder {
 	private String getBaseUrl() {
 
 		String baseUrl = configuration.getHost();
-		String protocolUrl = HTTPS_URL_PROTOCOL;
+		String protocolUrl = configuration.isUsingNotSecureHttp() ? HTTP_URL_PROTOCOL : HTTPS_URL_PROTOCOL;
 		String urlTenant = configuration.getTenant();
 
 		return protocolUrl + urlTenant + "." + baseUrl + "/" + PATH_WS;

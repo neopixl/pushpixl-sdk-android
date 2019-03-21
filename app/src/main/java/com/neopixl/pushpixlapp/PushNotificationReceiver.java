@@ -43,9 +43,12 @@ public class PushNotificationReceiver extends FirebaseMessagingService {
 
 
         if (pendingIntent != null) {
+            Map<String, String> payloadPushPixl = remoteMessage.getData(); // Containt "Body", "_nid", "alltags"
+            String messageIdFromFirebase = remoteMessage.getMessageId();
+
             int notificationId = remoteMessage.getMessageId() != null ? remoteMessage.getMessageId().hashCode() : NOTIFICATION_DEFAULT_ID;
             String title = context.getString(R.string.app_name);
-            String description = remoteMessage.getNotification() != null ? remoteMessage.getNotification().getTitle() : "";
+            String description = remoteMessage.getNotification() != null ? remoteMessage.getNotification().getTitle() : "Salut, default value";
             NotificationUtil.createNewNotification(context, notificationId, pendingIntent, title, description);
         }
         // END

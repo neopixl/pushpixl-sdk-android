@@ -15,6 +15,7 @@ import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.NoPreferencesException;
 import com.neopixl.pushpixl.exception.NoTokenException;
 import com.neopixl.pushpixl.exception.PushpixlException;
+import com.neopixl.pushpixl.listener.NotificationSendListener;
 import com.neopixl.pushpixl.listener.ReadConfirmationListener;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
@@ -25,6 +26,7 @@ import com.neopixl.pushpixl.network.util.URLBuilder;
 import com.neopixl.pushpixl.util.PushPixlPreferences;
 
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -205,7 +207,17 @@ public class PushpixlManager {
      * @param listener a listener to handle success and error
      */
     public void confirmReading(@NonNull RemoteMessage remoteMessage, ReadConfirmationListener listener) {
-        confirmReading(remoteMessage.getMessageId(), listener);
+        Map<String, String> data = remoteMessage.getData();
+        String messageId = null;
+        if (data != null) {
+            String messageIdInternal = data.get(PushPixlConstant.DATA_KEY_INTERNAL_ID);
+            if (messageIdInternal != null) {
+                messageId = messageIdInternal;
+            }
+        }
+        if (messageId != null) {
+            confirmReading(messageId, listener);
+        }
     }
 
     /**
@@ -221,7 +233,7 @@ public class PushpixlManager {
      * @param messageId the message ID
      * @param listener a listener to handle success and error
      */
-    public void confirmReading(@NonNull String messageId, ReadConfirmationListener listener) {
+    public void confirmReading(@NonNull String messageId, @Nullable ReadConfirmationListener listener) {
         String token = FirebaseInstanceId.getInstance().getToken();
         if (token == null) {
             Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
@@ -233,5 +245,23 @@ public class PushpixlManager {
 
         Log.i(PushPixlConstant.NP_LOG_TAG, "handle notification id : "+messageId);
         networkManager.confirmReading(configuration, token, messageId, listener);
+    }
+
+    /**
+     * Send a push notification via PushPixl, on this device
+     * @param message the message to display
+     */
+    public void pushToMySelf(@NonNull String message, @Nullable NotificationSendListener listener) {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        if (token == null) {
+            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+            if (listener != null) {
+                listener.onNotificationError(message, new NoTokenException("There is no firebase token, nothing have been sent to the server"));
+            }
+            return;
+        }
+
+        Log.i(PushPixlConstant.NP_LOG_TAG, "Will launch a push to this user : "+ token);
+        networkManager.pushToMySelf(configuration, token, message, listener);
     }
 }

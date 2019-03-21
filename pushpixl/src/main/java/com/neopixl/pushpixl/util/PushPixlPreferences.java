@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.neopixl.pushpixl.BuildConfig;
 import com.neopixl.pushpixl.model.UserPreferences;
 
 public class PushPixlPreferences {
 
-	private static final String PUSHPIXL_PREF = "Gcok816HADO9lyH51gt]e5Xe}wv";
+	private static final String PUSHPIXL_PREF = BuildConfig.APPLICATION_ID;
 	private static final String KEY_USER_PREFS = "KEY_USER_PREFS";
 
 	public static UserPreferences getUserPreferences(Context context){

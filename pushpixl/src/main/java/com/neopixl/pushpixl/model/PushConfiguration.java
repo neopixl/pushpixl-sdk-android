@@ -3,6 +3,7 @@ package com.neopixl.pushpixl.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.util.TagsUtil;
 
@@ -21,6 +22,7 @@ public class PushConfiguration {
     private boolean debug;
     private boolean autoRefresh;
     private boolean askBatteryOptimization;
+    private boolean useNotSecureHttp;
     @Nullable private List<String> defaultTags;
     @Nullable private QuietTime defaultQuietTime;
 
@@ -36,12 +38,13 @@ public class PushConfiguration {
         this.secret = secret;
         this.tenant = tenant;
 
-        this.host = "pushpixl.io";
+        this.host = PushPixlConstant.HOSTNAME;
         this.debug = false;
         this.autoRefresh = true;
         this.askBatteryOptimization = false;
         this.defaultTags = null;
         this.defaultQuietTime = null;
+        this.useNotSecureHttp = false;
     }
 
     /**
@@ -124,6 +127,18 @@ public class PushConfiguration {
     }
 
     /**
+     *  Allow the SDK to use the not secure http:// scheme. This is not allowed in production mode
+     *  DEFAULT : false
+     *
+     * @param useNotSecureHttp if true the scheme will be http without ssl
+     * @return the current configuration
+     */
+    public PushConfiguration useNotSecureHttp(boolean useNotSecureHttp) {
+        this.useNotSecureHttp = useNotSecureHttp;
+        return this;
+    }
+
+    /**
      * Get the app token for Pushpixl
      *
      * @return token, not null
@@ -179,6 +194,19 @@ public class PushConfiguration {
      */
     public boolean isAutoRefresh() {
         return autoRefresh;
+    }
+
+    /**
+     * Get the configuration for using the not secure http:// scheme.
+     * This is not allowed in production mode
+     *
+     * @return useNotSecureHttp
+     */
+    public boolean isUsingNotSecureHttp() {
+        if (isDebug()) {
+            return useNotSecureHttp;
+        }
+        return false;
     }
 
     /**

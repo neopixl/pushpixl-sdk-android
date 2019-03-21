@@ -28,11 +28,13 @@ public class PushApplication extends Application {
         // ***
         // ADDED FOR LIBRARY
         PushConfiguration configuration = new PushConfiguration(
-                "50465c62-a3e5-4bfb-9aa6-528395d3800e",
-                "208b23a5-3aed-49fe-b999-f2ece02656dc"
+                "500e73a3-9dc8-4e92-9cb9-dd14e815e1e3",
+                "ca2b64ac-991b-40fa-80f3-16be05e53461"
                 , "neopixl")
+                .hostname("pushpixl.lan")
                 .debug(BuildConfig.DEBUG)
                 .autoRefresh(true)
+                .useNotSecureHttp(true)
                 .askBatteryOptimization(true);
 
         PushpixlManager.install(this, configuration);

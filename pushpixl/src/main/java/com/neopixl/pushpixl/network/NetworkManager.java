@@ -1,6 +1,7 @@
 package com.neopixl.pushpixl.network;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -12,6 +13,7 @@ import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.PushNetworkException;
 import com.neopixl.pushpixl.exception.PushpixlException;
+import com.neopixl.pushpixl.listener.NotificationSendListener;
 import com.neopixl.pushpixl.listener.ReadConfirmationListener;
 import com.neopixl.pushpixl.listener.UserPreferencesListener;
 import com.neopixl.pushpixl.listener.UserPreferencesRemoveListener;
@@ -157,6 +159,39 @@ public class NetworkManager {
 
         request.setTag("CONFIRM_READING");
         request.addUserAndPassword(configuration.getToken(), configuration.getSecret());
+
+        requestQueue.add(request);
+    }
+
+    public void pushToMySelf(final PushConfiguration configuration, final String token, final String message, @Nullable final NotificationSendListener listener) {
+        String url = URLBuilder.getInstance().getPushMySelf(token);
+
+        PushPixlRequest request = new PushPixlRequest(Request.Method.POST,url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String string) {
+                if (listener != null) {
+                    listener.onNotificationSent(token, message);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                if (listener != null) {
+                    PushpixlException pushpixlException = new PushNetworkException("Web request went wrong", volleyError, volleyError.networkResponse);
+                    listener.onNotificationError(message, pushpixlException);
+                }
+            }
+        });
+
+        request.addUserAndPassword(configuration.getToken(), configuration.getSecret());
+        request.addParameter("messageBody",message);
+        request.addParameter("appKey", configuration.getToken());
+
+        String isInProductionValue = Boolean.valueOf(!configuration.isDebug()).toString();
+        request.addParameter("prod", isInProductionValue);
+
+        request.setTag("SEND_MESSAGE");
 
         requestQueue.add(request);
     }

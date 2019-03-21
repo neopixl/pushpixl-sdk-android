@@ -75,6 +75,7 @@ public class PushConfigurationTest {
         assertEquals("Should be equals", false, configuration.isDebug());
         assertEquals("Should be equals", true, configuration.isAutoRefresh());
         assertEquals("Should be equals", false, configuration.isAskBatteryOptimization());
+        assertEquals("Should be equals", false, configuration.isUsingNotSecureHttp());
     }
 
     @Test
@@ -86,6 +87,7 @@ public class PushConfigurationTest {
         boolean debug = true;
         boolean autoRefresh = true;
         boolean batteryOptimization = true;
+        boolean notSecureHttp = false;
 
         PushConfiguration configuration = new PushConfiguration(
                 token,
@@ -95,6 +97,7 @@ public class PushConfigurationTest {
                 .debug(debug)
                 .autoRefresh(autoRefresh)
                 .askBatteryOptimization(batteryOptimization)
+                .useNotSecureHttp(notSecureHttp)
                 .defaultTags(defaultTags)
                 .defaultQuietTime(defaultQuietTime);
 
@@ -103,10 +106,43 @@ public class PushConfigurationTest {
         assertEquals("Should be equals", tenant, configuration.getTenant());
         assertEquals("Should be equals", host, configuration.getHost());
         assertEquals("Should be equals", debug, configuration.isDebug());
+        assertEquals("Should be equals", notSecureHttp, configuration.isUsingNotSecureHttp());
         assertEquals("Should be equals", autoRefresh, configuration.isAutoRefresh());
         assertEquals("Should be equals", batteryOptimization, configuration.isAskBatteryOptimization());
         assertEquals("Should be equals", defaultTags, configuration.getDefaultTags());
         assertEquals("Should be equals", defaultQuietTime, configuration.getDefaultQuietTime());
+    }
+
+    @Test
+    public void notSecureAllowedInDebug() throws Exception {
+        String token = "50465c62-a3e5-4bfb-9aa6-528395d3800e";
+        String secret = "208b23a5-3aed-49fe-b999-f2ece02656dc";
+        String tenant = "neopixl";
+
+        PushConfiguration configuration = new PushConfiguration(
+                token,
+                secret
+                , tenant)
+                .debug(true)
+                .useNotSecureHttp(true);
+
+        assertEquals("Should be equals", true, configuration.isUsingNotSecureHttp());
+    }
+
+    @Test
+    public void notSecureNotAllowedInProd() throws Exception {
+        String token = "50465c62-a3e5-4bfb-9aa6-528395d3800e";
+        String secret = "208b23a5-3aed-49fe-b999-f2ece02656dc";
+        String tenant = "neopixl";
+
+        PushConfiguration configuration = new PushConfiguration(
+                token,
+                secret
+                , tenant)
+                .debug(false)
+                .useNotSecureHttp(true);
+
+        assertEquals("Should be equals", false, configuration.isUsingNotSecureHttp());
     }
 
     @Test(expected = IncorrectConfigurationException.class)
