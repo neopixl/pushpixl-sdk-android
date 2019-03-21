@@ -39,7 +39,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation ('com.neopixl:spitfire:2.0.0-alpha5') // DEPENDANCE ADDED BY MAVEN
+    implementation ('com.neopixl:spitfire:2.0.0-alpha6') // DEPENDANCE ADDED BY MAVEN
     implementation ('com.google.firebase:firebase-messaging:17.4.0') // ADDED FOR LIBRARY
 }
 
