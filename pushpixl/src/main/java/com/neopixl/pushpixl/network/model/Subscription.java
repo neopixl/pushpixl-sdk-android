@@ -14,7 +14,7 @@ import java.util.TimeZone;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Subscription {
 
-	private int id;
+	private Long id;
 	private String type;
     private String alias;
 	private String deviceToken;
@@ -52,11 +52,11 @@ public class Subscription {
 		this.tags = newTagList;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -148,7 +148,6 @@ public class Subscription {
 		this.endQuietTime = endQuietTime;
 	}
 
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -156,10 +155,10 @@ public class Subscription {
 
 		Subscription that = (Subscription) o;
 
-		if (getId() != that.getId()) return false;
 		if (isValid() != that.isValid()) return false;
 		if (isDisabled() != that.isDisabled()) return false;
 		if (isProduction() != that.isProduction()) return false;
+		if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
 		if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null)
 			return false;
 		if (getAlias() != null ? !getAlias().equals(that.getAlias()) : that.getAlias() != null)
@@ -179,7 +178,7 @@ public class Subscription {
 
 	@Override
 	public int hashCode() {
-		int result = getId();
+		int result = getId() != null ? getId().hashCode() : 0;
 		result = 31 * result + (getType() != null ? getType().hashCode() : 0);
 		result = 31 * result + (getAlias() != null ? getAlias().hashCode() : 0);
 		result = 31 * result + (getDeviceToken() != null ? getDeviceToken().hashCode() : 0);

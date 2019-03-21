@@ -1,5 +1,7 @@
 package com.neopixl.pushpixl.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 
 import java.text.SimpleDateFormat;
@@ -14,7 +16,9 @@ import java.util.Locale;
  */
 public class QuietTime {
 
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
     private Date mStartTime;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
     private Date mEndTime;
 
     /**
@@ -29,6 +33,9 @@ public class QuietTime {
      */
     public Date getEndTime() {
         return mEndTime;
+    }
+
+    public QuietTime() {
     }
 
     /**
@@ -47,7 +54,6 @@ public class QuietTime {
      * @return     	 		a new QuietTimeRequest object initialized with startTime(startHour+startMinue), endTime (endHour+endMinute) and the current time zone set on the smartphone
      * @see                QuietTime
      */
-
     public QuietTime(int startHour, int startMinute, int endHour, int endMinute) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
 

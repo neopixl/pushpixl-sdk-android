@@ -2,6 +2,7 @@ package com.neopixl.pushpixl.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.VolleyLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,7 +30,8 @@ public class PushPixlPreferences {
         try {
             returnData = SpitfireManager.getObjectMapper().readValue(json.getBytes(PushPixlConstant.CHARSET_ENCODING), UserPreferences.class);
         } catch (Exception e) {
-            VolleyLog.e(e, "An error occurred while parsing network response:");
+            e.printStackTrace();
+            Log.e(PushPixlConstant.NP_LOG_TAG, "Cannot save the value in the preference", e);
         }
         return returnData;
     }
@@ -45,6 +47,7 @@ public class PushPixlPreferences {
                 String json = new String(ptext, PushPixlConstant.CHARSET_ENCODING);
                 editor.putString(KEY_USER_PREFS, json);
             } catch (JsonProcessingException | UnsupportedEncodingException e) {
+                Log.e(PushPixlConstant.NP_LOG_TAG, "Cannot save the retreive in the preference", e);
                 e.printStackTrace();
             }
         } else {
