@@ -110,6 +110,12 @@ public class PushpixlManager {
 
         PushPixlPreferences.setUserPreferences(context, preferences);
 
+        if (FirebaseInstanceId.getInstance() == null) {
+            if (listener != null) {
+                listener.onUserPreferencesError(preferences, new NoTokenException("There is no firebase token yet"));
+            }
+            return;
+        }
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
@@ -173,6 +179,13 @@ public class PushpixlManager {
      */
     public void removeUserPreferences(@Nullable final UserPreferencesRemoveListener listener) {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Removing user preferences");
+
+        if (FirebaseInstanceId.getInstance() == null) {
+            if (listener != null) {
+                listener.onUserPreferencesRemoveError(new NoTokenException("There is no firebase token yet"));
+            }
+            return;
+        }
 
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -256,18 +269,36 @@ public class PushpixlManager {
      * @param messageId the message ID
      * @param listener  a listener to handle success and error
      */
-    public void confirmReading(@NonNull String messageId, @Nullable ReadConfirmationListener listener) {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        if (token == null) {
-            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+    public void confirmReading(@NonNull final String messageId, @Nullable final ReadConfirmationListener listener) {
+        Log.i(PushPixlConstant.NP_LOG_TAG, "Try handle notification id : " + messageId);
+
+        if (FirebaseInstanceId.getInstance() == null) {
             if (listener != null) {
-                listener.onMessageMarkedAsReadError(messageId, new NoTokenException("There is no firebase token, nothing have been sent to the server"));
+                listener.onMessageMarkedAsReadError(messageId, new NoTokenException("There is no firebase token yet"));
             }
             return;
         }
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
 
-        Log.i(PushPixlConstant.NP_LOG_TAG, "handle notification id : " + messageId);
-        networkManager.confirmReading(configuration, token, messageId, listener);
+                        if (!task.isSuccessful() || task.getResult() == null) {
+                            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+                            if (listener != null) {
+                                listener.onMessageMarkedAsReadError(messageId, new NoTokenException("There is no firebase token, nothing have been sent to the server"));
+                            }
+                            return;
+                        }
+
+                        String token = task.getResult().getToken();
+
+
+                        Log.i(PushPixlConstant.NP_LOG_TAG, "handle notification id : " + messageId);
+                        networkManager.confirmReading(configuration, token, messageId, listener);
+                    }
+                });
+
     }
 
     /**
@@ -278,6 +309,12 @@ public class PushpixlManager {
     public void pushToMySelf(@NonNull final String message, @Nullable final NotificationSendListener listener) {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Will launch a push to this user");
 
+        if (FirebaseInstanceId.getInstance() == null) {
+            if (listener != null) {
+                listener.onNotificationError(message, new NoTokenException("There is no firebase token yet"));
+            }
+            return;
+        }
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
