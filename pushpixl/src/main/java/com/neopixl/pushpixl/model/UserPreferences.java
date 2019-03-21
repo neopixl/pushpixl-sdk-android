@@ -20,6 +20,13 @@ public class UserPreferences {
 
     /**
      * Configure the user preferences
+     * WARNING This should be used only by jackson
+     */
+    public UserPreferences() {
+    }
+
+    /**
+     * Configure the user preferences
      * @param alias the ID of the user
      */
     public UserPreferences(@NonNull String alias) {
@@ -27,6 +34,19 @@ public class UserPreferences {
             throw new IllegalArgumentException("The alias cannot be empty");
         }
         this.alias = alias;
+    }
+
+    /**
+     *  Allow the user to use a quiet time
+     *  If not setted the default quiet time will be used
+     *  DEFAULT : @Null
+     *
+     * @param alias the alias
+     * @return the current preferences
+     */
+    public UserPreferences alias(@NonNull String alias) {
+        this.alias = alias;
+        return this;
     }
 
     /**

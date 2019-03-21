@@ -17,22 +17,22 @@ import java.util.Locale;
 public class QuietTime {
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
-    private Date mStartTime;
+    private Date startTime;
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
-    private Date mEndTime;
+    private Date endTime;
 
     /**
      * @return the startTime
      */
     public Date getStartTime() {
-        return mStartTime;
+        return startTime;
     }
 
     /**
      * @return the endTime
      */
     public Date getEndTime() {
-        return mEndTime;
+        return endTime;
     }
 
     public QuietTime() {
@@ -80,8 +80,8 @@ public class QuietTime {
         GregorianCalendar startCalendar = new GregorianCalendar(year, month, day, startHour, startMinute, 00);
         GregorianCalendar endCalendar = new GregorianCalendar(year, month, day, endHour, endMinute, 00);
 
-        mStartTime = startCalendar.getTime();
-        mEndTime = endCalendar.getTime();
+        startTime = startCalendar.getTime();
+        endTime = endCalendar.getTime();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class QuietTime {
         if(o instanceof QuietTime) {
             QuietTime otherQuietTimeRequest = (QuietTime)o;
 
-            return mStartTime.equals(otherQuietTimeRequest.getStartTime()) && mEndTime.equals(otherQuietTimeRequest.getEndTime());
+            return startTime.equals(otherQuietTimeRequest.getStartTime()) && endTime.equals(otherQuietTimeRequest.getEndTime());
         }
 
         return false;
@@ -97,7 +97,7 @@ public class QuietTime {
 
     @Override
     public String toString() {
-        return mStartTime+"<>"+mEndTime;
+        return startTime+"<>"+endTime;
     }
 
 }
