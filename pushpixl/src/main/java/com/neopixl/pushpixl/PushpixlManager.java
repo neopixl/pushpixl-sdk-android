@@ -1,12 +1,12 @@
 package com.neopixl.pushpixl;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.RemoteMessage;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.NoPreferencesException;
@@ -23,6 +23,9 @@ import com.neopixl.pushpixl.network.util.URLBuilder;
 import com.neopixl.pushpixl.util.PushPixlPreferences;
 
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -46,7 +49,7 @@ public class PushpixlManager {
     /**
      * Install the given configuration as the default PushpixlManager
      *
-     * @param context the application context
+     * @param context       the application context
      * @param configuration the configuration for the manager
      * @return the new PushpixlManager
      */
@@ -59,14 +62,16 @@ public class PushpixlManager {
     }
 
 
-    @NonNull private Context context;
-    @NonNull private PushConfiguration configuration;
+    @NonNull
+    private Context context;
+    @NonNull
+    private PushConfiguration configuration;
     private NetworkManager networkManager;
 
     /**
      * Default constructor for installation
      *
-     * @param context the application context
+     * @param context       the application context
      * @param configuration the configuration for the manager
      */
     private PushpixlManager(@NonNull Context context, @NonNull PushConfiguration configuration) {
@@ -76,7 +81,8 @@ public class PushpixlManager {
     }
 
     /**
-     *  Get the current used configuration
+     * Get the current used configuration
+     *
      * @return the push configuration
      */
     @NonNull
@@ -97,26 +103,33 @@ public class PushpixlManager {
      * Update the user data on the Pushpixl servers
      *
      * @param preferences the preference of the current user
-     * @param listener a listener to handle success and error
+     * @param listener    a listener to handle success and error
      */
-    public void updateUserPreferences(@NonNull UserPreferences preferences, @Nullable UserPreferencesListener listener) {
+    public void updateUserPreferences(@NonNull final UserPreferences preferences, @Nullable final UserPreferencesListener listener) {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Updating user preferences");
 
         PushPixlPreferences.setUserPreferences(context, preferences);
 
-        String token = FirebaseInstanceId.getInstance().getToken();
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
 
-        if (token == null) {
-            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
-            if (listener != null) {
-                listener.onUserPreferencesError(preferences, new NoTokenException("There is no firebase token, the preferences will be uploaded automaticatly if the configuration is in `autoRefresh` mode"));
-            }
-            return;
-        }
+                        if (!task.isSuccessful() || task.getResult() == null) {
+                            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+                            if (listener != null) {
+                                listener.onUserPreferencesError(preferences, new NoTokenException("There is no firebase token, the preferences will be uploaded automaticatly if the configuration is in `autoRefresh` mode"));
+                            }
+                            return;
+                        }
 
-        Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+                        String token = task.getResult().getToken();
 
-        networkManager.registerDevice(configuration, preferences, token, listener);
+                        Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+
+                        networkManager.registerDevice(configuration, preferences, token, listener);
+                    }
+                });
     }
 
     /**
@@ -128,6 +141,7 @@ public class PushpixlManager {
 
     /**
      * Update the user data on the Pushpixl servers based on the already saved preferences
+     *
      * @param listener a listener to handle success and error
      */
     public void reloadUserPreferences(@Nullable UserPreferencesListener listener) {
@@ -154,43 +168,53 @@ public class PushpixlManager {
 
     /**
      * Remove the user data on the pushpixl servers based on the firebase token
+     *
      * @param listener a listener to handle success and error
      */
     public void removeUserPreferences(@Nullable final UserPreferencesRemoveListener listener) {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Removing user preferences");
 
-        String token = FirebaseInstanceId.getInstance().getToken();
-        if (token == null) {
-            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
-            if (listener != null) {
-                listener.onUserPreferencesRemoveError(new NoTokenException("There is no firebase token, nothing have been sent to the server"));
-            }
-            return;
-        }
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
 
-        Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
+                        if (!task.isSuccessful() || task.getResult() == null) {
+                            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+                            if (listener != null) {
+                                listener.onUserPreferencesRemoveError(new NoTokenException("There is no firebase token, the preferences will be uploaded automaticatly if the configuration is in `autoRefresh` mode"));
+                            }
+                            return;
+                        }
 
-        networkManager.unregisterDevice(configuration, token, new UserPreferencesRemoveListener() {
-            @Override
-            public void onUserPreferencesRemoved(String token) {
-                PushPixlPreferences.setUserPreferences(context, null);
+                        String token = task.getResult().getToken();
 
-                if (listener != null) {
-                    listener.onUserPreferencesRemoved(token);
-                }
-            }
+                        Log.i(PushPixlConstant.NP_LOG_TAG, "The firebase token already exist");
 
-            @Override
-            public void onUserPreferencesRemoveError(PushpixlException exception) {
-                if (listener != null) {
-                    listener.onUserPreferencesRemoveError(exception);
-                }
-            }
-        });
+                        networkManager.unregisterDevice(configuration, token, new UserPreferencesRemoveListener() {
+                            @Override
+                            public void onUserPreferencesRemoved(String token) {
+                                PushPixlPreferences.setUserPreferences(context, null);
+
+                                if (listener != null) {
+                                    listener.onUserPreferencesRemoved(token);
+                                }
+                            }
+
+                            @Override
+                            public void onUserPreferencesRemoveError(PushpixlException exception) {
+                                if (listener != null) {
+                                    listener.onUserPreferencesRemoveError(exception);
+                                }
+                            }
+                        });
+                    }
+                });
     }
 
     /**
      * Mark the current message as `read` helpfull for statistics
+     *
      * @param remoteMessage the message
      */
     public void confirmReading(@NonNull RemoteMessage remoteMessage) {
@@ -199,8 +223,9 @@ public class PushpixlManager {
 
     /**
      * Mark the current message as `read` helpfull for statistics
+     *
      * @param remoteMessage the message
-     * @param listener a listener to handle success and error
+     * @param listener      a listener to handle success and error
      */
     public void confirmReading(@NonNull RemoteMessage remoteMessage, ReadConfirmationListener listener) {
         Map<String, String> data = remoteMessage.getData();
@@ -218,6 +243,7 @@ public class PushpixlManager {
 
     /**
      * Mark the current message as `read` helpfull for statistics
+     *
      * @param messageId the message ID
      */
     public void confirmReading(@NonNull String messageId) {
@@ -226,8 +252,9 @@ public class PushpixlManager {
 
     /**
      * Mark the current message as `read` helpfull for statistics
+     *
      * @param messageId the message ID
-     * @param listener a listener to handle success and error
+     * @param listener  a listener to handle success and error
      */
     public void confirmReading(@NonNull String messageId, @Nullable ReadConfirmationListener listener) {
         String token = FirebaseInstanceId.getInstance().getToken();
@@ -239,25 +266,36 @@ public class PushpixlManager {
             return;
         }
 
-        Log.i(PushPixlConstant.NP_LOG_TAG, "handle notification id : "+messageId);
+        Log.i(PushPixlConstant.NP_LOG_TAG, "handle notification id : " + messageId);
         networkManager.confirmReading(configuration, token, messageId, listener);
     }
 
     /**
      * Send a push notification via PushPixl, on this device
+     *
      * @param message the message to display
      */
-    public void pushToMySelf(@NonNull String message, @Nullable NotificationSendListener listener) {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        if (token == null) {
-            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
-            if (listener != null) {
-                listener.onNotificationError(message, new NoTokenException("There is no firebase token, nothing have been sent to the server"));
-            }
-            return;
-        }
+    public void pushToMySelf(@NonNull final String message, @Nullable final NotificationSendListener listener) {
+        Log.i(PushPixlConstant.NP_LOG_TAG, "Will launch a push to this user");
 
-        Log.i(PushPixlConstant.NP_LOG_TAG, "Will launch a push to this user : "+ token);
-        networkManager.pushToMySelf(configuration, token, message, listener);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                        if (!task.isSuccessful() || task.getResult() == null) {
+                            Log.i(PushPixlConstant.NP_LOG_TAG, "There is no firebase token");
+                            if (listener != null) {
+                                listener.onNotificationError(message, new NoTokenException("There is no firebase token, the preferences will be uploaded automaticatly if the configuration is in `autoRefresh` mode"));
+                            }
+                            return;
+                        }
+
+                        String token = task.getResult().getToken();
+
+                        Log.i(PushPixlConstant.NP_LOG_TAG, "Will launch a push to this user : " + token);
+                        networkManager.pushToMySelf(configuration, token, message, listener);
+                    }
+                });
     }
 }
