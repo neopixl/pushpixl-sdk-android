@@ -111,10 +111,7 @@ public class PushpixlManager {
         PushPixlPreferences.setUserPreferences(context, preferences);
 
         if (FirebaseInstanceId.getInstance() == null) {
-            if (listener != null) {
-                listener.onUserPreferencesError(preferences, new NoTokenException("There is no firebase token yet"));
-            }
-            return;
+            throw new IncorrectConfigurationException("The Firebase SDK is not configurated, check the troubleshooting section on github : https://github.com/neopixl/pushpixl-sdk-android");
         }
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -181,10 +178,7 @@ public class PushpixlManager {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Removing user preferences");
 
         if (FirebaseInstanceId.getInstance() == null) {
-            if (listener != null) {
-                listener.onUserPreferencesRemoveError(new NoTokenException("There is no firebase token yet"));
-            }
-            return;
+            throw new IncorrectConfigurationException("The Firebase SDK is not configurated, check the troubleshooting section on github : https://github.com/neopixl/pushpixl-sdk-android");
         }
 
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -273,10 +267,7 @@ public class PushpixlManager {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Try handle notification id : " + messageId);
 
         if (FirebaseInstanceId.getInstance() == null) {
-            if (listener != null) {
-                listener.onMessageMarkedAsReadError(messageId, new NoTokenException("There is no firebase token yet"));
-            }
-            return;
+            throw new IncorrectConfigurationException("The Firebase SDK is not configurated, check the troubleshooting section on github : https://github.com/neopixl/pushpixl-sdk-android");
         }
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -310,10 +301,7 @@ public class PushpixlManager {
         Log.i(PushPixlConstant.NP_LOG_TAG, "Will launch a push to this user");
 
         if (FirebaseInstanceId.getInstance() == null) {
-            if (listener != null) {
-                listener.onNotificationError(message, new NoTokenException("There is no firebase token yet"));
-            }
-            return;
+            throw new IncorrectConfigurationException("The Firebase SDK is not configurated, check the troubleshooting section on github : https://github.com/neopixl/pushpixl-sdk-android");
         }
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
