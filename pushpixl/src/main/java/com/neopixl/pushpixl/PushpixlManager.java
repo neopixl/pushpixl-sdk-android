@@ -237,7 +237,7 @@ public class PushpixlManager {
      * @param listener      a listener to handle success and error
      */
     public void confirmReading(@NonNull RemoteMessage remoteMessage, ReadConfirmationListener listener) {
-        String messageId = PushpixlData.extractData(remoteMessage, PushpixlData.KEY.ID);
+        String messageId = PushpixlData.extractData(remoteMessage, PushpixlData.Key.ID);
         if (messageId != null) {
             confirmReading(messageId, listener);
         }

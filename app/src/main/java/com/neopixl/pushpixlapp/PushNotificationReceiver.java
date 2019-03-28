@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.neopixl.pushpixl.PushpixlData;
 import com.neopixl.pushpixl.firebase.PushpixlFirebaseInstanceIDService;
 
 import java.util.Map;
@@ -45,7 +46,7 @@ public class PushNotificationReceiver extends PushpixlFirebaseInstanceIDService 
         if (pendingIntent != null) {
             int notificationId = remoteMessage.getMessageId() != null ? remoteMessage.getMessageId().hashCode() : NOTIFICATION_DEFAULT_ID;
             String title = "Title";
-            String description =  "Body";
+            String description =  PushpixlData.extractData(remoteMessage, PushpixlData.Key.MESSAGE);
             NotificationUtil.createNewNotification(context, notificationId, pendingIntent, title, description);
         }
         // END

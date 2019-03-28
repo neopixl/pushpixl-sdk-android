@@ -14,11 +14,11 @@ import androidx.annotation.StringDef;
 public abstract class PushpixlData {
 
 	@StringDef({
-			KEY.ID,
-			KEY.MESSAGE
+			Key.ID,
+			Key.MESSAGE
 	})
 	@Retention(RetentionPolicy.SOURCE)
-	@interface KEY {
+	public @interface Key {
 		/**
 		 * This represent the internal identifier of the message in the Pushpixl server instance
 		 */
@@ -31,14 +31,14 @@ public abstract class PushpixlData {
 	}
 
 	/**
-	 * Extract a specific data from a know {@link KEY}
+	 * Extract a specific data from a know {@link Key}
 	 *
 	 * @param remoteMessage the firebase remote message
-	 * @param key The {@link KEY} you want the value back
+	 * @param key The {@link Key} you want the value back
 	 * @return the value of the key, or null if not found
 	 */
 	@Nullable
-	public static String extractData(@NonNull final RemoteMessage remoteMessage, @NonNull @KEY final String key) {
+	public static String extractData(@NonNull final RemoteMessage remoteMessage, @NonNull @Key final String key) {
 		Map<String, String> data = remoteMessage.getData();
 		String valueToreturn = null;
 		if (data != null) {
