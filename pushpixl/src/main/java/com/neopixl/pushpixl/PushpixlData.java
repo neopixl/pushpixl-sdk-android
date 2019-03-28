@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 
+
 public abstract class PushpixlData {
 
 	@StringDef({
@@ -18,7 +19,14 @@ public abstract class PushpixlData {
 	})
 	@Retention(RetentionPolicy.SOURCE)
 	@interface KEY {
+		/**
+		 * This represent the internal identifier of the message in the Pushpixl server instance
+		 */
 		String ID = "_nid";
+
+		/**
+		 * This represent the message to display to the user
+		 */
 		String MESSAGE = "body";
 	}
 
