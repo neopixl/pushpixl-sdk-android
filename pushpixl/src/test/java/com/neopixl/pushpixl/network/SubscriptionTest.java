@@ -1,6 +1,6 @@
 package com.neopixl.pushpixl.network;
 
-import com.neopixl.pushpixl.PushPixlConstant;
+import com.neopixl.pushpixl.PushpixlData;
 import com.neopixl.pushpixl.model.QuietTime;
 import com.neopixl.pushpixl.network.model.Subscription;
 import com.neopixl.pushpixl.network.model.Tag;
@@ -65,7 +65,7 @@ public class SubscriptionTest {
         assertEquals(subscription.getDeviceToken(), stringDeviceToken);
         assertEquals(subscription.getStartQuietTime(), quietTimeRequest.getStartTime());
         assertEquals(subscription.getEndQuietTime(), quietTimeRequest.getEndTime());
-        assertEquals(subscription.getType(), PushPixlConstant.NP_SUBSCRIBTION_TYPE);
+        assertEquals(subscription.getType(), PushpixlData.NP_SUBSCRIBTION_TYPE);
 
         // Checking all tags are present
         for (Tag tag : subscription.getTags()) {

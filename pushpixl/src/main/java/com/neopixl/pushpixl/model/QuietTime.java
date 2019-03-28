@@ -1,14 +1,13 @@
 package com.neopixl.pushpixl.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.neopixl.pushpixl.PushPixlConstant;
+import com.neopixl.pushpixl.PushpixlData;
+import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -16,9 +15,9 @@ import java.util.Locale;
  */
 public class QuietTime {
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushpixlManager.NETWORK_FORMAT_DATE_QUIETTIME)
     private Date startTime;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern=PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushpixlManager.NETWORK_FORMAT_DATE_QUIETTIME)
     private Date endTime;
 
     /**

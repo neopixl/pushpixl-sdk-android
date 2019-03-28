@@ -1,8 +1,6 @@
 package com.neopixl.pushpixl.network;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
@@ -11,7 +9,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.neopixl.pushpixl.PushPixlConstant;
+import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.exception.PushNetworkException;
 import com.neopixl.pushpixl.exception.PushpixlException;
@@ -32,6 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Florian ALONSO on 5/2/18.
@@ -105,7 +106,7 @@ public class NetworkManager {
                 .listener(new RequestListener<Subscription>() {
                     @Override
                     public void onSuccess(@NonNull Request request, @NonNull NetworkResponse response, Subscription result) {
-                        Log.d(PushPixlConstant.NP_LOG_TAG, "device is now registered!");
+                        Log.d(PushpixlManager.NP_LOG_TAG, "device is now registered!");
                         if (listener != null) {
                             listener.onUserPreferencesUpdate(token, preferences);
                         }
@@ -150,7 +151,7 @@ public class NetworkManager {
                 if (listener != null) {
                     listener.onUserPreferencesRemoved(token);
                 } else {
-                    Log.d(PushPixlConstant.NP_LOG_TAG, "device is now registered!");
+                    Log.d(PushpixlManager.NP_LOG_TAG, "device is now registered!");
                 }
             }
 
@@ -184,7 +185,7 @@ public class NetworkManager {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("deviceToken", token);
         parameters.put("notificationId",messageId);
-        parameters.put("provider",PushPixlConstant.NP_SUBSCRIBTION_TYPE);
+        parameters.put("provider", Subscription.SUBSCRIBTION_TYPE);
 
 
         BaseRequest<Void> request = new BaseRequest.Builder<>(

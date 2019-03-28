@@ -1,12 +1,13 @@
 package com.neopixl.pushpixl.util;
 
 import android.os.Build;
-import androidx.annotation.Nullable;
 
 import com.neopixl.pushpixl.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class TagsUtil {
 

@@ -1,7 +1,6 @@
 package com.neopixl.pushpixl.listener;
 
 import com.neopixl.pushpixl.exception.PushpixlException;
-import com.neopixl.pushpixl.model.PushConfiguration;
 import com.neopixl.pushpixl.model.UserPreferences;
 
 /**

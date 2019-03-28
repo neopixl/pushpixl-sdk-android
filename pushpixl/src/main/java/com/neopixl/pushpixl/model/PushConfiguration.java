@@ -1,6 +1,5 @@
 package com.neopixl.pushpixl.model;
 
-import com.neopixl.pushpixl.PushPixlConstant;
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.util.TagsUtil;
 
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
  * For Neopixl
  */
 public class PushConfiguration {
+    private static final String HOSTNAME_DEFAULT = "pushpixl.io";
 
     @NonNull
     private String token;
@@ -45,7 +45,7 @@ public class PushConfiguration {
         this.secret = secret;
         this.tenant = tenant;
 
-        this.host = PushPixlConstant.HOSTNAME;
+        this.host = HOSTNAME_DEFAULT;
         this.debug = false;
         this.autoRefresh = true;
         this.askBatteryOptimization = false;

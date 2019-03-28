@@ -36,19 +36,16 @@ public class PushNotificationReceiver extends PushpixlFirebaseInstanceIDService 
             return;
         }
 
-        Log.e(TAG, "The bundle containt event type and ID");
+        Log.e(TAG, "The bundle contain event type and ID");
         Intent newIntent = new Intent(context, MainActivity.class);
         newIntent.putExtra("remote_message", remoteMessage);
         pendingIntent = PendingIntent.getActivity(context, REQUEST_CODE_NOTIFICATION_PUSH, newIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
         if (pendingIntent != null) {
-            Map<String, String> payloadPushPixl = remoteMessage.getData(); // Containt "Body", "_nid", "alltags"
-            String messageIdFromFirebase = remoteMessage.getMessageId();
-
             int notificationId = remoteMessage.getMessageId() != null ? remoteMessage.getMessageId().hashCode() : NOTIFICATION_DEFAULT_ID;
-            String title = context.getString(R.string.app_name);
-            String description = remoteMessage.getNotification() != null ? remoteMessage.getNotification().getTitle() : "Salut, default value";
+            String title = "Title";
+            String description =  "Body";
             NotificationUtil.createNewNotification(context, notificationId, pendingIntent, title, description);
         }
         // END

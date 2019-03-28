@@ -4,16 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.android.volley.VolleyLog;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.neopixl.pushpixl.BuildConfig;
-import com.neopixl.pushpixl.PushPixlConstant;
+import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.model.UserPreferences;
 import com.neopixl.spitfire.SpitfireManager;
 
 import java.io.UnsupportedEncodingException;
 
 public class PushPixlPreferences {
+
+    private static final String CHARSET_ENCODING = "UTF-8";
 
     private static final String PUSHPIXL_PREF = BuildConfig.APPLICATION_ID;
     private static final String KEY_USER_PREFS = "KEY_USER_PREFS";
@@ -28,10 +29,10 @@ public class PushPixlPreferences {
 
         UserPreferences returnData = null;
         try {
-            returnData = SpitfireManager.getObjectMapper().readValue(json.getBytes(PushPixlConstant.CHARSET_ENCODING), UserPreferences.class);
+            returnData = SpitfireManager.getObjectMapper().readValue(json.getBytes(CHARSET_ENCODING), UserPreferences.class);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(PushPixlConstant.NP_LOG_TAG, "Cannot save the value in the preference", e);
+            Log.e(PushpixlManager.NP_LOG_TAG, "Cannot save the value in the preference", e);
         }
         return returnData;
     }
@@ -44,10 +45,10 @@ public class PushPixlPreferences {
             byte ptext[];
             try {
                 ptext = SpitfireManager.getObjectMapper().writeValueAsBytes(value);
-                String json = new String(ptext, PushPixlConstant.CHARSET_ENCODING);
+                String json = new String(ptext, CHARSET_ENCODING);
                 editor.putString(KEY_USER_PREFS, json);
             } catch (JsonProcessingException | UnsupportedEncodingException e) {
-                Log.e(PushPixlConstant.NP_LOG_TAG, "Cannot save the retreive in the preference", e);
+                Log.e(PushpixlManager.NP_LOG_TAG, "Cannot save the retreive in the preference", e);
                 e.printStackTrace();
             }
         } else {

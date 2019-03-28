@@ -1,12 +1,12 @@
 package com.neopixl.pushpixl.model;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.neopixl.pushpixl.exception.IncorrectConfigurationException;
 import com.neopixl.pushpixl.util.TagsUtil;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Florian ALONSO on 5/2/18.

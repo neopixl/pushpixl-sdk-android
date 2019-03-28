@@ -2,17 +2,17 @@ package com.neopixl.pushpixl.network.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.neopixl.pushpixl.PushPixlConstant;
+import com.neopixl.pushpixl.PushpixlManager;
 import com.neopixl.pushpixl.model.QuietTime;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.TimeZone;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Subscription {
+	public static final String SUBSCRIBTION_TYPE = "ANDROID";
 
 	private Long id;
 	private String type;
@@ -23,11 +23,11 @@ public class Subscription {
 	private boolean disabled;
 	private String timezone;
 	private boolean production;
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=PushPixlConstant.NETWORK_FORMAT_DATE)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushpixlManager.NETWORK_FORMAT_DATE)
 	private Date subscriptionDate;
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushpixlManager.NETWORK_FORMAT_DATE_QUIETTIME)
 	private Date startQuietTime;
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern=PushPixlConstant.NETWORK_FORMAT_DATE_QUIETTIME)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern= PushpixlManager.NETWORK_FORMAT_DATE_QUIETTIME)
 	private Date endQuietTime;
 
 	public Subscription() {
@@ -37,7 +37,7 @@ public class Subscription {
 		super();
 		this.endQuietTime = quietTimeRequest.getEndTime();
 		this.startQuietTime = quietTimeRequest.getStartTime();
-		this.type = PushPixlConstant.NP_SUBSCRIBTION_TYPE;
+		this.type = SUBSCRIBTION_TYPE;
 		this.alias = alias;
 		this.deviceToken = newDeviceToken;
 		this.timezone = TimeZone.getDefault().getID();
