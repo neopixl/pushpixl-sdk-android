@@ -65,7 +65,7 @@ public class SubscriptionTest {
         assertEquals(subscription.getDeviceToken(), stringDeviceToken);
         assertEquals(subscription.getStartQuietTime(), quietTimeRequest.getStartTime());
         assertEquals(subscription.getEndQuietTime(), quietTimeRequest.getEndTime());
-        assertEquals(subscription.getType(), PushpixlData.NP_SUBSCRIBTION_TYPE);
+        assertEquals(subscription.getType(), Subscription.SUBSCRIBTION_TYPE);
 
         // Checking all tags are present
         for (Tag tag : subscription.getTags()) {
