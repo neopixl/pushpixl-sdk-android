@@ -130,7 +130,7 @@ public class PushConfigurationTest {
     }
 
     @Test
-    public void notSecureNotAllowedInProd() throws Exception {
+    public void notSecureAllowedInProd() throws Exception {
         String token = "50465c62-a3e5-4bfb-9aa6-528395d3800e";
         String secret = "208b23a5-3aed-49fe-b999-f2ece02656dc";
         String tenant = "neopixl";
@@ -142,7 +142,7 @@ public class PushConfigurationTest {
                 .debug(false)
                 .useNotSecureHttp(true);
 
-        assertEquals("Should be equals", false, configuration.isUsingNotSecureHttp());
+        assertEquals("Should be equals", true, configuration.isUsingNotSecureHttp());
     }
 
     @Test(expected = IncorrectConfigurationException.class)
