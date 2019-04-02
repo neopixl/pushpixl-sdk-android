@@ -136,10 +136,11 @@ This library was designed to be as simple to use as possible.  Here are the step
 # Migrate from the 1.X.X versions
 
 1. Remove GCM from the project
-2. Install Firebase and Pushpixl as described above
-2. Clear the informations provided in the manifest
-3. If your app is exending "PushPixlApplication" you don't need it anymore
-4. While updated the notification intent, you can now give the all remote_message to the PendingIntent
+2. Remove the custom Neopixl maven server url
+3. Install Firebase and Pushpixl as described above
+4. Clear the informations provided in the manifest
+5. If your app is exending "PushPixlApplication" you don't need it anymore
+6. While updated the notification intent, you can now give the all remote_message to the PendingIntent
 
 # Proguard
 
