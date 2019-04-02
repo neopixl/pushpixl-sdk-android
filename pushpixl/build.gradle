@@ -7,13 +7,13 @@ apply plugin: "net.saliman.cobertura"
 
 // =============== Global vars  ===============
 
-def versionNameGlobal = '1.2.4'
+def versionNameGlobal = '2.0.0'
 
 // =============== Android configuration  ===============
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     publishNonDefault true
 
     def p = ['curl', '-u', 'build:E$^VM8476C(XW>Kb6f;b', 'http://tools.neopixl.com/buildnumber/nextBuildNumber.php?project=pushpixl-sdk-android'].execute()
@@ -21,11 +21,15 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode code
         versionName versionNameGlobal
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 
     buildTypes {
@@ -61,9 +65,16 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.android.gms:play-services:4.4.52'
+    implementation 'androidx.annotation:annotation:1.0.2'
 
+    compileOnly("com.google.firebase:firebase-messaging:17.4.0") {
+        exclude group: 'org.json', module: 'json'
+    }
+    testImplementation("com.google.firebase:firebase-messaging:17.4.0") {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    implementation 'com.neopixl:spitfire:2.0.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.18.3'
@@ -195,6 +206,18 @@ publishing {
                 root.appendNode('description', 'Pushpixl.io SDK for Android')
                 root.appendNode('name', 'Pushpixl')
                 root.appendNode('url', 'https://neopixl.com')
+
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.implementation.allDependencies.each {
+                    if (it.group != null && it.name != null && it.group.startsWith("com.neopixl")) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
 
                 root.children().last() + pomConfig
             }

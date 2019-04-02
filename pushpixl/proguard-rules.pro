@@ -35,6 +35,17 @@
 #
 #
 
+-keep class com.neopixl.pushpixl.network.model.* { *; }
+-keep class com.neopixl.pushpixl.model.* { *; }
+-keep class com.neopixl.pushpixl.listener.* { *; }
+-keep class com.neopixl.pushpixl.exception.* { *; }
+
+-keep class com.neopixl.pushpixl.PushpixlManager { *; }
+-keep public class com.neopixl.pushpixl.PushpixlData { *; }
+-keep public class com.neopixl.pushpixl.firebase.PushpixlFirebaseInstanceIDService { *; }
+
+
+
 -dontwarn org.apache.http.**
 -dontwarn com.android.volley.**
 
@@ -47,42 +58,6 @@
     !private static *;
 }
 
--keep class com.neopixl.pushpixl.gcm.PushPixlApplication { *; }
-
--keep class com.neopixl.pushpixl.core.domain.QuietTime { *; }
--keep class com.neopixl.pushpixl.core.domain.Error { *; }
--keep class com.neopixl.pushpixl.core.domain.Payload { *; }
--keep class com.neopixl.pushpixl.core.domain.Subscription { *; }
-
--keep class com.neopixl.pushpixl.core.util.PushPixlContext { *; }
-
--keep public interface com.neopixl.pushpixl.core.RequestListener { *; }
--keep public class com.neopixl.pushpixl.core.NotificationManager {
-    public *;
-    !static !transient <fields>;
-    !private <methods>;
-    !private static *;
-}
-    #!private <fields>;
-    #!private <methods>;
-
--keep public class com.neopixl.pushpixl.core.handler.NotificationHandler {
-    public *;
-    !private <methods>;
-    !private static *;
-}
--keep class com.neopixl.pushpixl.gcm.AbstractGCMBroadcastReceiver { *; }
--keep public class com.neopixl.pushpixl.core.conf.PushPixlConstant { *; }
--keep public interface com.neopixl.pushpixl.core.util.GCMUtilRegistrationListener { *; }
-
-#Util
--keep class com.neopixl.pushpixl.core.util.GCMUtil { *; }
--keep class com.neopixl.pushpixl.core.util.PushPixlPreferences { *; }
--keep class com.neopixl.pushpixl.core.util.DeviceUtil { *; }
--keep class com.neopixl.pushpixl.core.util.PushPixlManifest { *; }
-
--keep public class com.neopixl.logger.NPLog { *; }
-
 -assumenosideeffects class android.util.Log {
     public static *** e(...);
     public static *** w(...);
@@ -90,14 +65,6 @@
     public static *** d(...);
     public static *** v(...);
 }
-
-#-assumenosideeffects class com.neopixl.logger.NPLog {
-#    public static *** e(...);
-#    public static *** w(...);
-#    public static *** wtf(...);
-#    public static *** d(...);
-#    public static *** v(...);
-#}
 
 ## repackage and optimize
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
