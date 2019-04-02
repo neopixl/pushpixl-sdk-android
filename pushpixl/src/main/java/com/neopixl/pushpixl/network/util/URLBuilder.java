@@ -10,7 +10,7 @@ public class URLBuilder {
 
 	private static String PATH_WS = "ws";
 
-	private static String URL_REGISTRATION = "recipient";
+	private static String URL_REGISTRATION = "recipient/sdk";
 	private static String URL_MESSAGE = "notification";
 	private static String URL_PUSH_MY_SELF = "push/self";
 
